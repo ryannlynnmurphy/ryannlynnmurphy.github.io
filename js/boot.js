@@ -95,7 +95,7 @@
     }).then(function() {
       return addSystem('  mid   (3.8B) .... ready');
     }).then(function() {
-      return addSystem('  full  (api)  .... standby');
+      return addSystem('  full  (7B)   .... standby');
     }).then(function() {
       return addSystem('no cloud. no telemetry. yours.');
     }).then(function() {
