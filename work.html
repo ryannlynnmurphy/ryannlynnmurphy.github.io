@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work — Ryann Lynn Murphy | Plays and Performance</title>
+  <meta name="description" content="Produced plays by Ryann Lynn Murphy: SCOUTS (read at Juilliard), Thoughts on Girlcock (Fordham thesis), and Grooming My Ass (Edinburgh Fringe Festival).">
+  <link rel="canonical" href="https://ryannlynnmurphy.com/work.html">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Work — Ryann Lynn Murphy | Plays and Performance">
+  <meta property="og:description" content="Three produced plays: SCOUTS (read at Juilliard), Thoughts on Girlcock, and Grooming My Ass (Edinburgh Fringe Festival).">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ryannlynnmurphy.com/work.html">
+  <meta property="og:image" content="https://ryannlynnmurphy.com/images/scouts-1.jpg">
+  <meta property="og:site_name" content="Ryann Lynn Murphy">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Work — Ryann Lynn Murphy | Plays and Performance">
+  <meta name="twitter:description" content="Three produced plays: SCOUTS, Thoughts on Girlcock, and Grooming My Ass.">
+  <meta name="twitter:image" content="https://ryannlynnmurphy.com/images/scouts-1.jpg">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* Lightbox */
+    .lightbox {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.93);
+      z-index: 200; display: none;
+      align-items: center; justify-content: center;
+      cursor: pointer; padding: 40px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw; max-height: 85vh; object-fit: contain;
+      border: 1px solid #333;
+      animation: lbIn 0.25s ease;
+    }
+    @keyframes lbIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 30px;
+      font-family: var(--font-mono); font-size: 0.65rem; color: #666;
+      background: none; border: 1px solid #333; padding: 4px 12px; cursor: pointer;
+    }
+    .lightbox-close:hover { color: var(--gold); border-color: var(--gold); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      font-size: 2rem; color: #555; background: none; border: none;
+      cursor: pointer; padding: 20px; user-select: none;
+    }
+    .lightbox-nav:hover { color: var(--gold); }
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
+    .lightbox-caption {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-mono); font-size: 0.55rem; color: #555; letter-spacing: 0.5px;
+    }
+
+    /* Photo hover */
+    .photo-grid img {
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .photo-grid img:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    /* Scroll reveal */
+    .play-section {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .play-section.visible { opacity: 1; transform: translateY(0); }
+    .play-section:nth-child(2) { transition-delay: 0.1s; }
+    .play-section:nth-child(3) { transition-delay: 0.2s; }
+
+    .photo-poster {
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .photo-poster:hover { transform: translateY(-3px); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <span class="nav-prompt" aria-hidden="true">C:\ryann&gt;</span>
+    <div class="nav-links">
+      <a href="about.html" class="nav-link">ABOUT</a>
+      <span class="nav-sep" aria-hidden="true">|</span>
+      <a href="work.html" class="nav-link active">WORK</a>
+      <span class="nav-sep" aria-hidden="true">|</span>
+      <a href="projects.html" class="nav-link">PROJECTS</a>
+      <span class="nav-sep" aria-hidden="true">|</span>
+      <a href="contact.html" class="nav-link">CONTACT</a>
+    </div>
+    <button class="nav-help" id="help-btn" aria-label="More options">[?]</button>
+  </nav>
+
+  <div class="hidden-menu" id="hidden-menu" role="menu">
+    <a href="https://github.com/ryannlynnmurphy" target="_blank" rel="noopener">GitHub</a>
+    <a href="assets/resume.pdf" target="_blank">Resume (PDF)</a>
+    <a href="secret.html">Secret Page</a>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLB(event)">
+    <button class="lightbox-close" onclick="closeLB()">&times; close</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navLB(event,-1)">&lsaquo;</button>
+    <img id="lb-img" src="" alt="Enlarged production photo">
+    <button class="lightbox-nav lightbox-next" onclick="navLB(event,1)">&rsaquo;</button>
+    <div class="lightbox-caption" id="lb-cap"></div>
+  </div>
+
+  <main class="page">
+    <h1 class="page-title">Work</h1>
+
+    <div class="play-section" data-reveal>
+      <div class="play-title">SCOUTS</div>
+      <div class="play-meta">Premiered at Fordham University, October 2024. Directed by Juju Jaworski. Closed private reading at Juilliard, January 2025, directed by Jasminn Johnson.</div>
+      <div class="photo-grid" data-gallery="scouts">
+        <img src="images/scouts-1.jpg" alt="SCOUTS production photo 1 — Fordham University premiere, October 2024" data-caption="SCOUTS &mdash; Fordham University, 2024" loading="lazy" onclick="openLB(this)">
+        <img src="images/scouts-2.jpg" alt="SCOUTS production photo 2 — cast performance at Fordham University, 2024" data-caption="SCOUTS &mdash; Fordham University, 2024" loading="lazy" onclick="openLB(this)">
+        <img src="images/scouts-3.jpg" alt="SCOUTS production photo 3 — stage scene at Fordham University, 2024" data-caption="SCOUTS &mdash; Fordham University, 2024" loading="lazy" onclick="openLB(this)">
+        <img src="images/scouts-4.jpg" alt="SCOUTS production photo 4 — Fordham University, 2024" data-caption="SCOUTS &mdash; Fordham University, 2024" loading="lazy" onclick="openLB(this)">
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="play-section" data-reveal>
+      <div class="play-title">Thoughts on Girlcock</div>
+      <div class="play-meta">Fordham Theatre Thesis. Premiered February 2025.</div>
+      <div class="photo-grid" data-gallery="togc">
+        <img src="images/togc-1.jpg" alt="Thoughts on Girlcock production photo 1 — Fordham Theatre thesis, February 2025" data-caption="Thoughts on Girlcock &mdash; Fordham, 2025" loading="lazy" onclick="openLB(this)">
+        <img src="images/togc-2.jpg" alt="Thoughts on Girlcock production photo 2 — performance at Fordham, 2025" data-caption="Thoughts on Girlcock &mdash; Fordham, 2025" loading="lazy" onclick="openLB(this)">
+        <img src="images/togc-3.jpg" alt="Thoughts on Girlcock production photo 3 — stage scene at Fordham, 2025" data-caption="Thoughts on Girlcock &mdash; Fordham, 2025" loading="lazy" onclick="openLB(this)">
+        <img src="images/togc-4.jpg" alt="Thoughts on Girlcock production photo 4 — Fordham, 2025" data-caption="Thoughts on Girlcock &mdash; Fordham, 2025" loading="lazy" onclick="openLB(this)">
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="play-section" data-reveal>
+      <div class="play-title">Grooming My Ass</div>
+      <div class="play-meta">Edinburgh Fringe Festival, August 2025.</div>
+      <img src="images/gma-poster.jpg" alt="Grooming My Ass official poster — Edinburgh Fringe Festival, August 2025" class="photo-poster" loading="lazy" onclick="openLB(this)" data-caption="Grooming My Ass &mdash; Edinburgh Fringe, 2025">
+    </div>
+
+    <hr>
+
+    <p class="page-intro">For writing samples or inquiries: <a href="mailto:ryannlynncontact@gmail.com">ryannlynncontact@gmail.com</a></p>
+
+    <footer class="footer">&copy; 2026 Ryann Lynn Murphy</footer>
+  </main>
+
+  <script src="js/easter-eggs.js"></script>
+  <script src="js/navigation.js"></script>
+  <script>
+    // Scroll reveal
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 }).observe(document.querySelector('[data-reveal]'));
+    document.querySelectorAll('[data-reveal]').forEach(function(el) {
+      new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 }).observe(el);
+    });
+
+    // Lightbox
+    var gallery = [], gIdx = 0;
+    function openLB(img) {
+      var grid = img.closest('[data-gallery]');
+      gallery = grid ? Array.from(grid.querySelectorAll('img')) : [img];
+      gIdx = gallery.indexOf(img);
+      document.getElementById('lb-img').src = img.src;
+      document.getElementById('lb-cap').textContent = img.dataset.caption || '';
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLB(e) {
+      if (e && e.target.id !== 'lightbox' && !e.target.classList.contains('lightbox-close')) return;
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function navLB(e, d) {
+      e.stopPropagation();
+      gIdx = (gIdx + d + gallery.length) % gallery.length;
+      document.getElementById('lb-img').src = gallery[gIdx].src;
+      document.getElementById('lb-cap').textContent = gallery[gIdx].dataset.caption || '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+      if (e.key === 'ArrowLeft') navLB(e, -1);
+      if (e.key === 'ArrowRight') navLB(e, 1);
+    });
+  </script>
+</body>
+</html>

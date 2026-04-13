@@ -1,0 +1,116 @@
+/* ============================================
+   EFFECTS -- Subtle modern flourishes
+   ============================================ */
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Glitch text -- triggers on hover */
+.glitch-hover {
+  position: relative;
+  display: inline-block;
+}
+.glitch-hover:hover {
+  animation: glitch-shift 0.2s steps(2) 1;
+}
+@keyframes glitch-shift {
+  0%   { transform: translate(0); }
+  25%  { transform: translate(-2px, 1px); }
+  50%  { transform: translate(2px, -1px); }
+  75%  { transform: translate(-1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+/* Subtle scan lines -- applied sparingly */
+.scanlines {
+  position: relative;
+}
+.scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.03),
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+/* Fade in on load */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Typing cursor for landing */
+.typing-cursor::after {
+  content: "█";
+  animation: blink 1s step-end infinite;
+  font-weight: normal;
+}
+
+/* Link hover -- subtle background highlight */
+.link-block {
+  display: inline-block;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  text-decoration: underline;
+  transition: background 0.1s, color 0.1s;
+}
+.link-block:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Image progressive load effect */
+.img-load {
+  background: linear-gradient(
+    180deg,
+    var(--bg-alt) 0%,
+    var(--bg-alt) 50%,
+    transparent 50%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+}
+
+/* Status dot -- pulsing green */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 6px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Counter / hit counter style */
+.counter {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  display: inline-block;
+}
+
+/* Status dot -- gold instead of green on inner pages */
+

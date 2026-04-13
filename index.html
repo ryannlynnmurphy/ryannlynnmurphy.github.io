@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ryann Lynn Murphy — Playwright, Technologist, Founder of Scatter Computing</title>
+  <meta name="description" content="Ryann Lynn Murphy is a playwright, creative technologist, and founder of Scatter Computing. Three produced plays, four shipped products, based in NYC.">
+  <link rel="canonical" href="https://ryannlynnmurphy.com/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Ryann Lynn Murphy — Playwright, Technologist, Founder of Scatter Computing">
+  <meta property="og:description" content="Playwright, creative technologist, and founder of Scatter Computing. Three produced plays, four shipped products, based in NYC.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ryannlynnmurphy.com/">
+  <meta property="og:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
+  <meta property="og:site_name" content="Ryann Lynn Murphy">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ryann Lynn Murphy — Playwright, Technologist, Founder of Scatter Computing">
+  <meta name="twitter:description" content="Playwright, creative technologist, and founder of Scatter Computing. Three produced plays, four shipped products, based in NYC.">
+  <meta name="twitter:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ryann Lynn Murphy",
+    "url": "https://ryannlynnmurphy.com",
+    "image": "https://ryannlynnmurphy.com/images/headshot-1.jpg",
+    "jobTitle": "Playwright / Creative Technologist",
+    "description": "Playwright, creative technologist, and founder of Scatter Computing.",
+    "sameAs": [
+      "https://github.com/ryannlynnmurphy",
+      "https://instagram.com/ryannlynnmurphy",
+      "https://tiktok.com/@ryannlynnmurphy",
+      "https://x.com/ryannlynnmurphy",
+      "https://ryannlynnmurphy.substack.com"
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/terminal.css">
+</head>
+<body>
+
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="scan-overlay" aria-hidden="true"></div>
+
+  <div class="scene" id="scene">
+    <div class="computer">
+      <div class="monitor-body">
+        <div class="screen" id="screen">
+          <div class="screen-flash" id="flash"></div>
+          <div class="screen-glare"></div>
+
+          <div class="screen-content" id="content">
+            <!-- Terminal output -->
+            <div class="terminal-output" id="output"></div>
+
+            <!-- Input line -->
+            <div class="terminal-input-line" id="input-line" style="display:none;">
+              <span class="prompt">&gt;</span>
+              <input type="text" id="input" class="terminal-input" autocomplete="off" spellcheck="false">
+              <span class="cursor-blink">&#9608;</span>
+            </div>
+          </div>
+        </div>
+        <div class="power-led" id="led"></div>
+        <div class="monitor-brand">Scatter</div>
+      </div>
+      <div class="stand-neck"></div>
+      <div class="stand-base"></div>
+      <div class="desk"></div>
+      <div class="keyboard" aria-hidden="true">
+        <div class="key-row">
+          <div class="key"></div><div class="key"></div><div class="key"></div>
+          <div class="key"></div><div class="key"></div><div class="key"></div>
+          <div class="key"></div><div class="key"></div><div class="key"></div>
+          <div class="key"></div><div class="key"></div><div class="key"></div>
+          <div class="key"></div><div class="key"></div>
+          <div class="key spacebar"></div>
+          <div class="key"></div><div class="key"></div><div class="key"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/rain.js"></script>
+  <script src="js/bot.js"></script>
+  <script src="js/boot.js"></script>
+</body>
+</html>

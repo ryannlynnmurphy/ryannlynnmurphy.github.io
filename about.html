@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Ryann Lynn Murphy | Playwright and Creative Technologist</title>
+  <meta name="description" content="Ryann Lynn Murphy is a playwright, creative technologist, and founder of Scatter Computing. BA Theatre from Fordham, three produced plays, self-taught engineer. Based in NYC.">
+  <link rel="canonical" href="https://ryannlynnmurphy.com/about.html">
+  <!-- Open Graph -->
+  <meta property="og:title" content="About — Ryann Lynn Murphy">
+  <meta property="og:description" content="Playwright, creative technologist, and founder of Scatter Computing. BA Theatre from Fordham, three produced plays, self-taught engineer. Based in NYC.">
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="https://ryannlynnmurphy.com/about.html">
+  <meta property="og:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
+  <meta property="og:site_name" content="Ryann Lynn Murphy">
+  <meta property="profile:first_name" content="Ryann">
+  <meta property="profile:last_name" content="Murphy">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About — Ryann Lynn Murphy">
+  <meta name="twitter:description" content="Playwright, creative technologist, and founder of Scatter Computing. Based in NYC.">
+  <meta name="twitter:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ryann Lynn Murphy",
+    "url": "https://ryannlynnmurphy.com",
+    "image": "https://ryannlynnmurphy.com/images/headshot-1.jpg",
+    "jobTitle": "Playwright / Creative Technologist",
+    "description": "Playwright, creative technologist, and founder of Scatter Computing. Based in NYC.",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Fordham University"
+    },
+    "sameAs": [
+      "https://github.com/ryannlynnmurphy",
+      "https://instagram.com/ryannlynnmurphy",
+      "https://tiktok.com/@ryannlynnmurphy",
+      "https://x.com/ryannlynnmurphy",
+      "https://ryannlynnmurphy.substack.com"
+    ],
+    "knowsAbout": ["Playwriting", "Theatre Production", "Creative Technology", "AI", "Python", "JavaScript", "TypeScript"]
+  }
+  </script>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .about-grid { opacity: 0; transform: translateY(20px); animation: aboutIn 0.8s ease 0.2s forwards; }
+    @keyframes aboutIn { to { opacity: 1; transform: translateY(0); } }
+
+    .headshot {
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+    .headshot:hover {
+      transform: scale(1.02);
+    }
+
+    .about-subtitle {
+      position: relative;
+      overflow: hidden;
+    }
+    .about-subtitle::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 40px; height: 1px;
+      background: var(--gold);
+      animation: lineGrow 1.2s ease 0.8s forwards;
+    }
+    @keyframes lineGrow { from { width: 0; } to { width: 40px; } }
+
+    .about-bio { opacity: 0; animation: fadeUp 0.6s ease 0.5s forwards; }
+    @keyframes fadeUp { to { opacity: 1; } }
+    .about-links { opacity: 0; animation: fadeUp 0.6s ease 0.7s forwards; }
+
+    .btn-95 {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-95::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.4s ease;
+    }
+    .btn-95:hover::after { left: 100%; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <span class="nav-prompt" aria-hidden="true">C:\ryann&gt;</span>
+    <div class="nav-links">
+      <a href="about.html" class="nav-link active">ABOUT</a>
+      <span class="nav-sep" aria-hidden="true">|</span>
+      <a href="work.html" class="nav-link">WORK</a>
+      <span class="nav-sep" aria-hidden="true">|</span>
+      <a href="projects.html" class="nav-link">PROJECTS</a>
+      <span class="nav-sep" aria-hidden="true">|</span>
+      <a href="contact.html" class="nav-link">CONTACT</a>
+    </div>
+    <button class="nav-help" id="help-btn" aria-label="More options">[?]</button>
+  </nav>
+
+  <div class="hidden-menu" id="hidden-menu" role="menu">
+    <a href="https://github.com/ryannlynnmurphy" target="_blank" rel="noopener">GitHub</a>
+    <a href="assets/resume.pdf" target="_blank">Resume (PDF)</a>
+    <a href="secret.html">Secret Page</a>
+  </div>
+
+  <main class="page">
+    <div class="about-grid">
+      <div class="about-photo">
+        <img src="images/headshot-1.jpg" alt="Ryann Lynn Murphy — playwright, technologist, and founder of Scatter Computing" class="headshot">
+      </div>
+      <div class="about-text">
+        <h1>Ryann Lynn Murphy</h1>
+        <p class="about-subtitle">Playwright / Technologist</p>
+        <p class="about-bio">Founder of Scatter Computing. Three produced plays, three shipped products, one month of coding. BA Theatre from Fordham, based in NYC.</p>
+        <div class="about-links">
+          <a href="assets/resume.pdf" target="_blank" class="btn-95">Resume</a>
+          <a href="mailto:ryannlynncontact@gmail.com" class="btn-95">Email</a>
+          <a href="https://github.com/ryannlynnmurphy" target="_blank" rel="noopener" class="btn-95">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">&copy; 2026 Ryann Lynn Murphy</footer>
+  </main>
+
+  <script src="js/easter-eggs.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/ambient.js"></script>
+</body>
+</html>

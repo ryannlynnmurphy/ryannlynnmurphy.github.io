@@ -1,0 +1,471 @@
+/* ============================================
+   LANDING PAGE -- Full CRT Computer Animation
+   ============================================ */
+
+.landing-body {
+  background: #050505;
+  overflow: hidden;
+  min-height: 100vh;
+  cursor: default;
+}
+
+/* Code rain canvas */
+#rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.15;
+}
+
+/* Scan lines over everything */
+.scan-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.12) 0px,
+    rgba(0, 0, 0, 0.12) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Scene container */
+.landing-scene {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  opacity: 0;
+}
+.landing-scene.powered-on {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+/* ---- FULL COMPUTER ---- */
+.computer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Desk surface */
+.desk {
+  width: 700px;
+  height: 6px;
+  background: linear-gradient(180deg, #1a1714, #0f0d0b);
+  border-radius: 2px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.6);
+}
+
+/* Monitor */
+.monitor {
+  position: relative;
+  z-index: 3;
+}
+
+.monitor-body {
+  background: linear-gradient(170deg, #2e2e2e 0%, #1a1a1a 100%);
+  border-radius: 16px 16px 8px 8px;
+  padding: 20px 22px 28px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 8px 40px rgba(0,0,0,0.7),
+    0 0 100px rgba(0, 255, 0, 0.04);
+  position: relative;
+}
+
+/* Power LED */
+.power-led {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #333;
+  transition: background 0.5s, box-shadow 0.5s;
+}
+.power-led.on {
+  background: #0F0;
+  box-shadow: 0 0 6px #0F0, 0 0 12px rgba(0,255,0,0.3);
+}
+
+/* Brand badge */
+.monitor-brand {
+  position: absolute;
+  bottom: 9px;
+  right: 22px;
+  font-family: var(--font-ui);
+  font-size: 8px;
+  color: #444;
+  letter-spacing: 3px;
+}
+
+/* Screen */
+.screen {
+  width: 560px;
+  height: 370px;
+  background: #000;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Screen off state */
+.screen-off {
+  background: #050505;
+}
+
+/* Power-on flash */
+.screen-flash {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+}
+.screen-flash.flash {
+  animation: powerFlash 0.6s ease-out forwards;
+}
+@keyframes powerFlash {
+  0%   { opacity: 0; }
+  5%   { opacity: 1; }
+  10%  { opacity: 0; }
+  15%  { opacity: 0.7; }
+  20%  { opacity: 0; }
+  30%  { opacity: 0.4; background: #0F0; }
+  50%  { opacity: 0.1; }
+  100% { opacity: 0; }
+}
+
+/* Static noise */
+.screen-static {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+.screen-static.on {
+  animation: staticFlicker 0.15s steps(3) 4;
+}
+@keyframes staticFlicker {
+  0%   { opacity: 0.8; }
+  50%  { opacity: 0.4; }
+  100% { opacity: 0.6; }
+}
+
+/* Horizontal sweep line on power-on */
+.screen-sweep {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: rgba(0, 255, 0, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  top: 0;
+}
+.screen-sweep.sweep {
+  opacity: 1;
+  animation: sweepDown 0.8s ease-in-out forwards;
+}
+@keyframes sweepDown {
+  0%   { top: 0; opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* CRT curvature + glow */
+.screen::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 80px rgba(0, 0, 0, 0.5),
+    inset 0 0 4px rgba(0, 255, 0, 0.05);
+  pointer-events: none;
+  z-index: 8;
+}
+
+/* Screen glare */
+.screen-glare {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 6px;
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.04) 0%,
+    transparent 35%,
+    transparent 65%,
+    rgba(255,255,255,0.015) 100%
+  );
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* Terminal content inside screen */
+.screen-content {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 28px 32px;
+  font-family: var(--font-mono);
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.screen-content.visible {
+  opacity: 1;
+}
+
+.terminal-line { min-height: 1.3em; }
+
+.terminal-boot {
+  font-size: 0.62rem;
+  color: #0a0;
+  opacity: 0.5;
+}
+
+.terminal-name {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+}
+
+.terminal-divider {
+  font-size: 0.75rem;
+  color: #0F0;
+  opacity: 0.4;
+}
+
+.terminal-tagline {
+  font-size: 0.9rem;
+  color: #aaa;
+  letter-spacing: 1px;
+}
+
+.terminal-status {
+  font-size: 0.58rem;
+  color: #0a0;
+  line-height: 1.9;
+  opacity: 0.6;
+}
+
+.status-label {
+  display: inline-block;
+  width: 55px;
+  color: #444;
+}
+
+.terminal-prompt { color: #0F0; margin-right: 6px; }
+
+.terminal-enter {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #0F0;
+  background: none;
+  border: 1px solid #0F0;
+  padding: 5px 24px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.15s;
+  text-shadow: 0 0 6px rgba(0, 255, 0, 0.4);
+}
+.terminal-enter:hover {
+  background: #0F0;
+  color: #000;
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.5), 0 0 80px rgba(0, 255, 0, 0.15);
+  text-shadow: none;
+}
+
+/* Monitor stand */
+.stand-neck {
+  width: 50px;
+  height: 40px;
+  background: linear-gradient(90deg, #1a1a1a, #252525, #1a1a1a);
+  z-index: 1;
+}
+
+.stand-base {
+  width: 160px;
+  height: 10px;
+  background: linear-gradient(180deg, #222, #1a1a1a);
+  border-radius: 0 0 6px 6px;
+  z-index: 1;
+}
+
+/* Keyboard */
+.keyboard {
+  width: 420px;
+  height: 28px;
+  background: linear-gradient(180deg, #2a2a2a, #1e1e1e);
+  border-radius: 3px 3px 4px 4px;
+  margin-top: 12px;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 10px;
+}
+
+.key-row {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+}
+
+.key {
+  flex: 1;
+  height: 8px;
+  background: #333;
+  border-radius: 1px;
+  border: 1px solid #3a3a3a;
+}
+.key.spacebar {
+  flex: 6;
+}
+
+/* Screen dying on exit */
+.screen-dying .screen-content {
+  animation: contentDie 0.3s ease-in forwards;
+}
+@keyframes contentDie {
+  0%   { opacity: 1; filter: none; }
+  50%  { opacity: 1; filter: brightness(3); }
+  100% { opacity: 0; filter: brightness(0); }
+}
+
+.screen.dying {
+  animation: crtOff 0.5s ease-in forwards;
+}
+@keyframes crtOff {
+  0%   { filter: none; }
+  30%  { filter: brightness(2); }
+  50%  { background: #fff; }
+  60%  { clip-path: inset(0 0 0 0); }
+  80%  { clip-path: inset(48% 0 48% 0); background: #fff; filter: brightness(3); }
+  95%  { clip-path: inset(49.5% 10% 49.5% 10%); background: #fff; }
+  100% { clip-path: inset(50% 50% 50% 50%); background: #000; filter: brightness(0); }
+}
+
+/* ---- GLITCH OVERLAY ---- */
+.glitch-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  z-index: 9999;
+  display: none;
+  pointer-events: none;
+  overflow: hidden;
+}
+.glitch-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: glitchFade 0.8s ease forwards;
+}
+@keyframes glitchFade {
+  0%   { background: #000; }
+  15%  { background: #0F0; }
+  20%  { background: #000; }
+  35%  { background: #FF00FF; }
+  40%  { background: #000; }
+  60%  { background: #fff; }
+  100% { background: #FAFAFA; }
+}
+
+.glitch-text {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.glitch-text span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.glitch-text span:nth-child(1) {
+  color: #000;
+  z-index: 3;
+  animation: g1 0.6s steps(3) infinite;
+}
+.glitch-text span:nth-child(2) {
+  color: #0FF;
+  z-index: 2;
+  animation: g2 0.6s steps(3) infinite;
+}
+.glitch-text span:nth-child(3) {
+  color: #F0F;
+  z-index: 1;
+  animation: g3 0.6s steps(3) infinite;
+}
+
+@keyframes g1 {
+  0%   { clip-path: inset(20% 0 60% 0); transform: translate(-50%, -50%) translate(-2px, 0); }
+  50%  { clip-path: inset(60% 0 10% 0); transform: translate(-50%, -50%) translate(2px, 0); }
+  100% { clip-path: inset(30% 0 40% 0); transform: translate(-50%, -50%) translate(-1px, 0); }
+}
+@keyframes g2 {
+  0%   { clip-path: inset(50% 0 20% 0); transform: translate(-50%, -50%) translate(2px, 1px); }
+  50%  { clip-path: inset(10% 0 60% 0); transform: translate(-50%, -50%) translate(-2px, -1px); }
+  100% { clip-path: inset(70% 0 5% 0); transform: translate(-50%, -50%) translate(1px, 1px); }
+}
+@keyframes g3 {
+  0%   { clip-path: inset(65% 0 5% 0); transform: translate(-50%, -50%) translate(-3px, -1px); }
+  50%  { clip-path: inset(25% 0 50% 0); transform: translate(-50%, -50%) translate(3px, 1px); }
+  100% { clip-path: inset(45% 0 25% 0); transform: translate(-50%, -50%) translate(-2px, 1px); }
+}
+
+/* ---- MOBILE ---- */
+@media (max-width: 700px) {
+  .monitor-body {
+    padding: 14px 14px 22px;
+    border-radius: 12px 12px 6px 6px;
+  }
+  .screen {
+    width: 82vw;
+    height: 280px;
+  }
+  .screen-content { padding: 18px 20px; }
+  .terminal-name { font-size: 1.1rem; letter-spacing: 1px; }
+  .terminal-tagline { font-size: 0.75rem; }
+  .desk { width: 90vw; }
+  .keyboard { width: 70vw; }
+  .stand-base { width: 110px; }
+  .glitch-text { font-size: 1.4rem; }
+}
+
+@media (max-width: 400px) {
+  .screen { height: 250px; }
+  .screen-content { padding: 14px 16px; }
+  .terminal-name { font-size: 0.9rem; }
+}

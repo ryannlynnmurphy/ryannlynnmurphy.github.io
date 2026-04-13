@@ -1,0 +1,13 @@
+# Environment & secrets
+.env
+*.key
+
+# Tooling
+.superpowers/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
