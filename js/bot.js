@@ -97,7 +97,7 @@ var Bot = (function() {
     scatter: [
       "scatter is a voice assistant that lives on a $80 computer in your bedroom and actually does what you ask.\n\nyou talk to it, it talks back. it can check your email, manage your calendar, control your lights, and search the internet. it remembers what you've talked about before.\n\nthe nerdy version: raspberry pi 5, whisper for voice recognition, python, sqlite for memory, hooked into gmail, google calendar, home assistant, and tavily.\n\nthere's a demo:",
     ],
-    schools: [
+    "scatter schools": [
       "scatter schools is a learning platform for kids, 3K through 8th grade. every subject \u2014 math, science, reading, history, coding, world languages, all of it. lessons get tailored to what each kid is actually interested in.\n\nthe big idea: most of the time it just serves lessons from a database of real, vetted educational content. no AI needed, loads instantly. when it does use AI \u2014 to adapt a lesson to a different grade level or fill a gap \u2014 it checks the AI's work against the source material before the kid ever sees it. nothing gets through unchecked.\n\nthe system gets smarter the more kids use it. once a lesson gets adapted for a grade level, it saves it so no future student has to wait for it again.\n\npatent pending. designed so all the kid's data can stay on their device. she built this because she wanted to learn to code and nothing good existed, so she made the thing that would have taught her.\n\nthe nerdy version: three-tier content routing, RAG verification, adaptive caching, next.js, typescript. the patent covers the full architecture.",
     ],
     studioproj: [
@@ -119,7 +119,7 @@ var Bot = (function() {
       "here.",
     ],
     help: [
-      "try: plays, projects, mostly, producing, scouts, girlcock, grooming my ass, scatter, schools, studio, contact, resume, headshot, who is ryann\n\nor just type whatever. i'll try.",
+      "try: plays, projects, mostly, producing, scouts, girlcock, grooming my ass, scatter, scatter schools, studio, contact, resume, headshot, who is ryann\n\nor just type whatever. i'll try.",
     ],
     unknown: [
       "404. try: plays, projects, contact.",
