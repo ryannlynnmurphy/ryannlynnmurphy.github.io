@@ -99,7 +99,7 @@
     }).then(function() {
       return addSystem('local models. open source. your hardware.');
     }).then(function() {
-      return addSystem('no cloud. no telemetry. yours.');
+      return addSystem('nothing leaves your machine. ever.');
     }).then(function() {
       return addSystem('');
     }).then(function() {
