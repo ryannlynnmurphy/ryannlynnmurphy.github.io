@@ -92,13 +92,13 @@ var Bot = (function() {
       "she's been producing since college. three years as program manager at fordham theatre, managing teams of 40-50 students per production while also running admin, budgets, scheduling, and the department's social media.\n\nshe crowdfunded her edinburgh fringe debut in collaboration with rogue arts nyc, a NYC-based production and nightlife company.\n\ncurrently producing a short film called Shorty.\n\nshe owns a studio. producing isn't a side thing, it's part of the core pitch: playwright, producer, technologist.",
     ],
     tech: [
-      "she built three things in march 2026. had never written code before that month.\n\n\u2022 scatter \u2014 a voice assistant she talks to. runs on a tiny computer in her apartment.\n\u2022 scatter academy \u2014 a learning platform for kids, 3K\u20138th grade. every subject. patent pending.\n\u2022 scatter studio \u2014 her whole creative setup, controlled by voice.\n\nwhich one?",
+      "she built three things in march 2026. had never written code before that month.\n\n\u2022 scatter \u2014 a voice assistant she talks to. runs on a tiny computer in her apartment.\n\u2022 scatter schools \u2014 a learning platform for kids, 3K\u20138th grade. every subject. patent pending.\n\u2022 scatter studio \u2014 her whole creative setup, controlled by voice.\n\nwhich one?",
     ],
     scatter: [
       "scatter is basically siri if siri lived on a $80 computer in your bedroom and actually did what you asked.\n\nyou talk to it, it talks back. it can check your email, manage your calendar, control your lights, and search the internet. it remembers what you've talked about before.\n\nthe nerdy version: raspberry pi 5, whisper for voice recognition, python, sqlite for memory, hooked into gmail, google calendar, home assistant, and tavily.\n\nthere's a demo:",
     ],
-    academy: [
-      "scatter academy is a learning platform for kids, 3K through 8th grade. every subject \u2014 math, science, reading, history, coding, world languages, all of it. lessons get tailored to what each kid is actually interested in.\n\nthe big idea: most of the time it just serves lessons from a database of real, vetted educational content. no AI needed, loads instantly. when it does use AI \u2014 to adapt a lesson to a different grade level or fill a gap \u2014 it checks the AI's work against the source material before the kid ever sees it. nothing gets through unchecked.\n\nthe system gets smarter the more kids use it. once a lesson gets adapted for a grade level, it saves it so no future student has to wait for it again.\n\npatent pending. designed so all the kid's data can stay on their device. she built this because she wanted to learn to code and nothing good existed, so she made the thing that would have taught her.\n\nthe nerdy version: three-tier content routing, RAG verification, adaptive caching, next.js, typescript. the patent covers the full architecture.",
+    schools: [
+      "scatter schools is a learning platform for kids, 3K through 8th grade. every subject \u2014 math, science, reading, history, coding, world languages, all of it. lessons get tailored to what each kid is actually interested in.\n\nthe big idea: most of the time it just serves lessons from a database of real, vetted educational content. no AI needed, loads instantly. when it does use AI \u2014 to adapt a lesson to a different grade level or fill a gap \u2014 it checks the AI's work against the source material before the kid ever sees it. nothing gets through unchecked.\n\nthe system gets smarter the more kids use it. once a lesson gets adapted for a grade level, it saves it so no future student has to wait for it again.\n\npatent pending. designed so all the kid's data can stay on their device. she built this because she wanted to learn to code and nothing good existed, so she made the thing that would have taught her.\n\nthe nerdy version: three-tier content routing, RAG verification, adaptive caching, next.js, typescript. the patent covers the full architecture.",
     ],
     studioproj: [
       "scatter studio is her creative workspace. she has four tiny computers networked together that can run different modes depending on what she's working on \u2014 making a game, editing a film, producing music, streaming, or writing.\n\nshe switches between them by talking to scatter or pressing a button on a stream deck. the whole thing is designed to run on minimal power.\n\nthe nerdy version: raspberry pi 5 cluster running distributed inference via exo, gigabit networking, PoE+ power, NVMe storage. solar-compatible.",
@@ -119,7 +119,7 @@ var Bot = (function() {
       "here.",
     ],
     help: [
-      "try: plays, projects, mostly, producing, scouts, girlcock, grooming my ass, scatter, academy, studio, contact, resume, headshot, who is ryann\n\nor just type whatever. i'll try.",
+      "try: plays, projects, mostly, producing, scouts, girlcock, grooming my ass, scatter, schools, studio, contact, resume, headshot, who is ryann\n\nor just type whatever. i'll try.",
     ],
     unknown: [
       "404. try: plays, projects, contact.",
@@ -278,8 +278,8 @@ var Bot = (function() {
     if (/contact|email|reach|collaborate/.test(t)) return 'contact';
     if (/(?<![n])act(ing|ress|or)?$|perform(ance|er|ing)?$|on stage|theatre credits|roles?$|cast/.test(t)) return 'acting';
     if (/^(tech|projects?|build|built|software|products?|engineering|shipped)/.test(t)) return 'tech';
-    if (/scatter(?!.*academy)/.test(t) && !/studio/.test(t)) return 'scatter';
-    if (/academy|education|k.?12|learning|patent/.test(t)) return 'academy';
+    if (/scatter(?!.*schools)/.test(t) && !/studio/.test(t)) return 'scatter';
+    if (/schools|education|k.?12|learning|patent/.test(t)) return 'schools';
     if (/studio|cluster|raspberry|hardware|modes?|infrastructure/.test(t)) return 'studioproj';
     if (/hire|hiring|work with|job|employ/.test(t)) return 'hire';
     if (/resume|cv|pdf/.test(t)) return 'resume';
@@ -483,7 +483,7 @@ var Bot = (function() {
         } else if (intent === 'plays') {
           addOptions(['scouts', 'thoughts on girlcock', 'grooming my ass', 'mostly']);
         } else if (intent === 'tech') {
-          addOptions(['scatter', 'academy', 'studio']);
+          addOptions(['scatter', 'schools', 'studio']);
         } else if (intent === 'greeting') {
           addOptions(['plays', 'projects', 'who is ryann', 'contact']);
         } else if (intent === 'who') {
@@ -497,9 +497,9 @@ var Bot = (function() {
           addImages(photos.gma);
         } else if (intent === 'scatter') {
           addHTML('<a href="https://www.youtube.com/shorts/e4Vl6--tPv0" target="_blank" class="msg-link">&#9654; watch scatter demo</a>');
-          addOptions(['academy', 'studio', 'contact']);
-        } else if (intent === 'academy' || intent === 'studioproj') {
-          addOptions(['scatter', 'academy', 'studio', 'contact']);
+          addOptions(['schools', 'studio', 'contact']);
+        } else if (intent === 'schools' || intent === 'studioproj') {
+          addOptions(['scatter', 'schools', 'studio', 'contact']);
         } else if (intent === 'hire' || intent === 'contact') {
           addHTML('<a href="mailto:ryannlynncontact@gmail.com" class="msg-link">email</a> &nbsp; <a href="https://github.com/ryannlynnmurphy" target="_blank" class="msg-link">github</a> &nbsp; <a href="https://www.linkedin.com/in/ryann-lynn-murphy" target="_blank" class="msg-link">linkedin</a> &nbsp; <a href="resume.html" target="_blank" class="msg-link">resume</a>');
         } else if (intent === 'konami') {
