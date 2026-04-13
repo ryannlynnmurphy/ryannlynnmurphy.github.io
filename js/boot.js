@@ -25,22 +25,22 @@
     });
   }
 
-  // Name flash overlay
+  // Name flash overlay — RYANN LYNN MURPHY
   function flashName() {
     var overlay = document.createElement('div');
     overlay.style.cssText = 'position:absolute;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;background:#000;pointer-events:none;';
 
     var text = document.createElement('div');
     text.style.cssText = 'font-family:inherit;font-size:1.4rem;font-weight:bold;letter-spacing:3px;color:#fff;position:relative;white-space:nowrap;';
-    text.textContent = 'SCATTER COMPUTING';
+    text.textContent = 'RYANN LYNN MURPHY';
 
     var cyan = document.createElement('span');
-    cyan.textContent = 'SCATTER COMPUTING';
+    cyan.textContent = 'RYANN LYNN MURPHY';
     cyan.style.cssText = 'position:absolute;top:0;left:0;color:#0FF;clip-path:inset(30% 0 40% 0);transform:translate(2px,1px);';
     text.appendChild(cyan);
 
     var magenta = document.createElement('span');
-    magenta.textContent = 'SCATTER COMPUTING';
+    magenta.textContent = 'RYANN LYNN MURPHY';
     magenta.style.cssText = 'position:absolute;top:0;left:0;color:#F0F;clip-path:inset(60% 0 10% 0);transform:translate(-2px,-1px);';
     text.appendChild(magenta);
 
@@ -88,16 +88,20 @@
   setTimeout(function() {
     content.classList.add('on');
 
-    addSystem('scatter v0.1.0 // local-first compute').then(function() {
-      return addSystem('routing: goldilocks protocol');
+    addSystem('scatter v0.1.0 // the mozilla of ai').then(function() {
+      return addSystem('');
     }).then(function() {
-      return addSystem('  tiny  (1.1B) .... ready');
+      return addSystem('ai belongs to the people who use it.');
     }).then(function() {
-      return addSystem('  mid   (3.8B) .... ready');
+      return addSystem('not the companies that sell it.');
     }).then(function() {
-      return addSystem('  full  (7B)   .... standby');
+      return addSystem('');
+    }).then(function() {
+      return addSystem('local models. open source. your hardware.');
     }).then(function() {
       return addSystem('no cloud. no telemetry. yours.');
+    }).then(function() {
+      return addSystem('');
     }).then(function() {
       return addSystem('ready_');
     }).then(function() {
