@@ -279,7 +279,7 @@ var Bot = (function() {
     if (/(?<![n])act(ing|ress|or)?$|perform(ance|er|ing)?$|on stage|theatre credits|roles?$|cast/.test(t)) return 'acting';
     if (/^(tech|projects?|build|built|software|products?|engineering|shipped)/.test(t)) return 'tech';
     if (/scatter(?!.*schools)/.test(t) && !/studio/.test(t)) return 'scatter';
-    if (/schools|education|k.?12|learning|patent/.test(t)) return 'schools';
+    if (/schools|education|k.?12|learning|patent/.test(t)) return 'scatter schools';
     if (/studio|cluster|raspberry|hardware|modes?|infrastructure/.test(t)) return 'studioproj';
     if (/hire|hiring|work with|job|employ/.test(t)) return 'hire';
     if (/resume|cv|pdf/.test(t)) return 'resume';
@@ -483,7 +483,7 @@ var Bot = (function() {
         } else if (intent === 'plays') {
           addOptions(['scouts', 'thoughts on girlcock', 'grooming my ass', 'mostly']);
         } else if (intent === 'tech') {
-          addOptions(['scatter', 'schools', 'studio']);
+          addOptions(['scatter', 'scatter schools', 'studio']);
         } else if (intent === 'greeting') {
           addOptions(['plays', 'projects', 'who is ryann', 'contact']);
         } else if (intent === 'who') {
@@ -497,9 +497,9 @@ var Bot = (function() {
           addImages(photos.gma);
         } else if (intent === 'scatter') {
           addHTML('<a href="https://www.youtube.com/shorts/e4Vl6--tPv0" target="_blank" class="msg-link">&#9654; watch scatter demo</a>');
-          addOptions(['schools', 'studio', 'contact']);
-        } else if (intent === 'schools' || intent === 'studioproj') {
-          addOptions(['scatter', 'schools', 'studio', 'contact']);
+          addOptions(['scatter schools', 'studio', 'contact']);
+        } else if (intent === 'scatter schools' || intent === 'scatterschools' || intent === 'studioproj') {
+          addOptions(['scatter', 'scatter schools', 'studio', 'contact']);
         } else if (intent === 'hire' || intent === 'contact') {
           addHTML('<a href="mailto:ryannlynncontact@gmail.com" class="msg-link">email</a> &nbsp; <a href="https://github.com/ryannlynnmurphy" target="_blank" class="msg-link">github</a> &nbsp; <a href="https://www.linkedin.com/in/ryann-lynn-murphy" target="_blank" class="msg-link">linkedin</a> &nbsp; <a href="resume.html" target="_blank" class="msg-link">resume</a>');
         } else if (intent === 'konami') {
