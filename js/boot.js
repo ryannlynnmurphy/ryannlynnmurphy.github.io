@@ -88,7 +88,7 @@
   setTimeout(function() {
     content.classList.add('on');
 
-    addSystem('scatter v0.1.0 // the mozilla of ai').then(function() {
+    addSystem('scatter v0.1.0 // the wikipedia of ai').then(function() {
       return addSystem('');
     }).then(function() {
       return addSystem('ai belongs to the people who use it.');
