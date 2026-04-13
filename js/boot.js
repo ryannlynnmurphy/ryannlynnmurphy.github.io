@@ -21,7 +21,7 @@
           clearInterval(iv);
           resolve();
         }
-      }, 20);
+      }, 15);
     });
   }
 
@@ -32,23 +32,21 @@
 
     var text = document.createElement('div');
     text.style.cssText = 'font-family:inherit;font-size:1.4rem;font-weight:bold;letter-spacing:3px;color:#fff;position:relative;white-space:nowrap;';
-    text.textContent = 'RYANN LYNN MURPHY';
+    text.textContent = 'SCATTER COMPUTING';
 
-    // RGB ghost layers
     var cyan = document.createElement('span');
-    cyan.textContent = 'RYANN LYNN MURPHY';
+    cyan.textContent = 'SCATTER COMPUTING';
     cyan.style.cssText = 'position:absolute;top:0;left:0;color:#0FF;clip-path:inset(30% 0 40% 0);transform:translate(2px,1px);';
     text.appendChild(cyan);
 
     var magenta = document.createElement('span');
-    magenta.textContent = 'RYANN LYNN MURPHY';
+    magenta.textContent = 'SCATTER COMPUTING';
     magenta.style.cssText = 'position:absolute;top:0;left:0;color:#F0F;clip-path:inset(60% 0 10% 0);transform:translate(-2px,-1px);';
     text.appendChild(magenta);
 
     overlay.appendChild(text);
     screen.appendChild(overlay);
 
-    // Flicker the name
     var count = 0;
     var iv = setInterval(function() {
       overlay.style.opacity = Math.random() > 0.3 ? '1' : '0';
@@ -60,7 +58,6 @@
         clearInterval(iv);
         overlay.style.opacity = '1';
         text.style.transform = 'none';
-        // Hold for a beat then fade
         setTimeout(function() {
           overlay.style.transition = 'opacity 0.4s';
           overlay.style.opacity = '0';
@@ -91,12 +88,18 @@
   setTimeout(function() {
     content.classList.add('on');
 
-    addSystem('SCATTER STUDIO v1.0.3').then(function() {
-      return addSystem('systems check .......... ok');
+    addSystem('scatter v0.1.0 // local-first compute').then(function() {
+      return addSystem('routing: goldilocks protocol');
     }).then(function() {
-      return addSystem('modules loaded ......... ok');
+      return addSystem('  tiny  (1.1B) .... ready');
     }).then(function() {
-      return addSystem('ready.');
+      return addSystem('  mid   (3.8B) .... ready');
+    }).then(function() {
+      return addSystem('  full  (api)  .... standby');
+    }).then(function() {
+      return addSystem('no cloud. no telemetry. yours.');
+    }).then(function() {
+      return addSystem('ready_');
     }).then(function() {
       setTimeout(function() {
         Bot.start();

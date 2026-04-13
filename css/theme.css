@@ -1,26 +1,27 @@
 /* ============================================
-   THEME -- Shared variables + terminal base
+   THEME -- Scatter Computing // dark-first
    ============================================ */
 
 :root {
-  /* Palette -- Hamptons Executive */
-  --bg: #FAF8F5;
-  --bg-alt: #F0EDE8;
-  --black: #1A1814;
-  --white: #FFFFFF;
-  --text: #2E2A26;
-  --text-muted: #6A655E;
-  --text-light: #9A9590;
-  --gold: #C9A96E;
-  --gold-dark: #A6894E;
-  --border: #D4CFC8;
-  --border-light: #E8E4DE;
-  --accent: #C9A96E;
+  /* Palette -- Terminal Dark */
+  --bg: #0a0a0a;
+  --bg-alt: #0e0e14;
+  --black: #050505;
+  --white: #e0e0e8;
+  --text: #c8c8d0;
+  --text-muted: #5a5a6e;
+  --text-light: #3a3a4e;
+  --green: #00ff88;
+  --green-dim: #00cc66;
+  --amber: #ffb800;
+  --border: #1e1e2a;
+  --border-light: #16161e;
+  --accent: #00ff88;
 
   /* Typography */
-  --font-body: Georgia, "Times New Roman", serif;
-  --font-mono: "Courier New", Courier, monospace;
-  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: "JetBrains Mono", "Fira Code", "Cascadia Code", "Courier New", monospace;
+  --font-mono: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+  --font-display: "JetBrains Mono", "Fira Code", "Courier New", monospace;
 
   /* Spacing */
   --space-xs: 4px;
@@ -37,18 +38,21 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
-/* Terminal base -- landing page (index.html) */
+/* Terminal base */
 body {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
   background: #050505;
   color: #0F0;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
   min-height: 100vh;
 }
-::selection { background: #0F0; color: #000; }
+::selection { background: #00ff88; color: #000; }
 img { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
