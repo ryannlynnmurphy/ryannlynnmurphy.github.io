@@ -74,7 +74,7 @@ var Bot = (function() {
       "you found it. type something.",
     ],
     who: [
-      "ryann lynn murphy. playwright, producer, technologist. founder of scatter computing. theatre degree from fordham, based in NYC.\n\ntaught herself to code in march 2026. shipped three products in the same month.",
+      "ryann lynn murphy. playwright, producer, technologist. founder of scatter computing, a nonprofit building open-source AI tools. BA theatre from fordham. incoming MPS at NYU's interactive telecommunications program. based in NYC.",
     ],
     plays: [
       "three produced plays. she wrote and produced all of them.\n\n\u2022 SCOUTS \u2014 fordham, oct 2024. dir. juju jaworski.\n\u2022 thoughts on girlcock \u2014 fordham thesis, feb 2025. dir. juju jaworski.\n\u2022 grooming my ass \u2014 edinburgh fringe, aug 2025. dir. asa nestlehutt.\n\nplus mostly \u2014 a new performance in development. two robots, a bicycle generator, and a shared database of AI essays.\n\npick one.",
@@ -89,16 +89,16 @@ var Bot = (function() {
       "grooming my ass. edinburgh fringe festival, august 2025. directed by asa nestlehutt. produced in collaboration with rogue arts nyc. originally previewed at theatre under st. marks and the tank.\n\na one-woman dark comedy that dissects the relationship between a seventeen-year-old transgender girl and a twenty-seven-year-old man. it's a love and hate letter to coming out, growing up, and first relationships. she gradually empties a can of shaving cream over her body throughout the show.\n\nshe warns you can't believe much of what she says.\n\ncast: ryann lynn murphy, boone sommers\nscenic: haley crawford | lights: lee lillis | costumes: peter chan | sound: nate dallimore | photos: helen hylton",
     ],
     producing: [
-      "she's been producing since college. three years as program manager at fordham theatre, managing teams of 40-50 students per production while also running admin, budgets, scheduling, and the department's social media.\n\nshe crowdfunded her edinburgh fringe debut in collaboration with rogue arts nyc, a NYC-based production and nightlife company.\n\ncurrently producing a short film called Shorty.\n\nshe owns a studio. producing isn't a side thing, it's part of the core pitch: playwright, producer, technologist.",
+      "she's been producing since college. three years as program manager at fordham theatre, managing teams of 40-50 students per production while also running admin, budgets, scheduling, and the department's social media.\n\nshe crowdfunded her edinburgh fringe debut in collaboration with rogue arts nyc, a NYC-based production and nightlife company.\n\ncurrently producing a short film called Shorty.",
     ],
     tech: [
-      "she built three things in march 2026. had never written code before that month.\n\n\u2022 scatter \u2014 a voice assistant she talks to. runs on a tiny computer in her apartment.\n\u2022 scatter schools \u2014 a learning platform for kids, 3K\u20138th grade. every subject. patent pending.\n\u2022 scatter studio \u2014 her whole creative setup, controlled by voice.\n\nwhich one?",
+      "\u2022 scatter \u2014 a voice assistant that runs on a tiny computer in her apartment.\n\u2022 scatter schools \u2014 a learning platform for kids, 3K\u20138th grade. every subject. patent pending.\n\u2022 scatter studio \u2014 her whole creative setup, controlled by voice.\n\nwhich one?",
     ],
     scatter: [
       "scatter is a voice assistant that lives on a $80 computer in your bedroom and actually does what you ask.\n\nyou talk to it, it talks back. it can check your email, manage your calendar, control your lights, and search the internet. it remembers what you've talked about before.\n\nthe nerdy version: raspberry pi 5, whisper for voice recognition, python, sqlite for memory, hooked into gmail, google calendar, home assistant, and tavily.\n\nthere's a demo:",
     ],
     "scatter schools": [
-      "scatter schools is a learning platform for kids, 3K through 8th grade. every subject \u2014 math, science, reading, history, coding, world languages, all of it. lessons get tailored to what each kid is actually interested in.\n\nthe big idea: most of the time it just serves lessons from a database of real, vetted educational content. no AI needed, loads instantly. when it does use AI \u2014 to adapt a lesson to a different grade level or fill a gap \u2014 it checks the AI's work against the source material before the kid ever sees it. nothing gets through unchecked.\n\nthe system gets smarter the more kids use it. once a lesson gets adapted for a grade level, it saves it so no future student has to wait for it again.\n\npatent pending. designed so all the kid's data can stay on their device. she built this because she wanted to learn to code and nothing good existed, so she made the thing that would have taught her.\n\nthe nerdy version: three-tier content routing, RAG verification, adaptive caching, next.js, typescript. the patent covers the full architecture.",
+      "scatter schools is a learning platform for kids, 3K through 8th grade. every subject \u2014 math, science, reading, history, coding, world languages, all of it. lessons get tailored to what each kid is actually interested in.\n\nthe big idea: most of the time it just serves lessons from a database of real, vetted educational content. no AI needed, loads instantly. when it does use AI \u2014 to adapt a lesson to a different grade level or fill a gap \u2014 it checks the AI's work against the source material before the kid ever sees it. nothing gets through unchecked.\n\nthe system gets smarter the more kids use it. once a lesson gets adapted for a grade level, it saves it so no future student has to wait for it again.\n\npatent pending. designed so all the kid's data can stay on their device.\n\nthe nerdy version: three-tier content routing, RAG verification, adaptive caching, next.js, typescript. the patent covers the full architecture.",
     ],
     studioproj: [
       "scatter studio is her creative workspace. she has four tiny computers networked together that can run different modes depending on what she's working on \u2014 making a game, editing a film, producing music, streaming, or writing.\n\nshe switches between them by talking to scatter or pressing a button on a stream deck. the whole thing is designed to run on minimal power.\n\nthe nerdy version: raspberry pi 5 cluster running distributed inference via exo, gigabit networking, PoE+ power, NVMe storage. solar-compatible.",
@@ -107,13 +107,13 @@ var Bot = (function() {
       "ryannlynncontact@gmail.com\ngithub.com/ryannlynnmurphy\nlinkedin.com/in/ryann-lynn-murphy\n\nor tell me what you need.",
     ],
     resume: [
-      "here you go. playwright / technologist. three plays, three products, one month of code.",
+      "here you go.",
     ],
     experience: [
-      "before the tech stuff she ran a theatre department. literally.\n\n\u2022 managed the fordham theatre program for three years \u2014 scheduling, budgets, events, social media, the whole operation.\n\u2022 produced multiple shows as lead artist.\n\u2022 wrote an opinion column for the school paper.\n\nthen in march 2026 she taught herself to code and built three products. that's the resume.",
+      "\u2022 managed the fordham theatre program for three years \u2014 scheduling, budgets, events, social media, the whole operation.\n\u2022 produced multiple shows as lead artist.\n\u2022 wrote an opinion column for the school paper.\n\u2022 founded scatter computing, a nonprofit building open-source AI tools.",
     ],
     skills: [
-      "the short version: she can write a play, build the app, wire the lights, run the socials, and manage the budget. in the same week.\n\ncoding: python, javascript, typescript, HTML/CSS.\ntools: raspberry pi, stream deck, git.\ncreative: playwriting, directing, sound design, social media.\nmusic: tuba (8 years), piano (6 years), guitar, singing.",
+      "coding: python, javascript, typescript, HTML/CSS.\ntools: raspberry pi, stream deck, git.\ncreative: playwriting, directing, producing, sound design, social media.\nmusic: tuba (8 years), piano (6 years), guitar, singing.",
     ],
     headshot: [
       "here.",
@@ -132,19 +132,19 @@ var Bot = (function() {
       "sure.", "anytime.", "you're welcome. need anything else?",
     ],
     cool: [
-      "right?",
-      "she's something.",
-      "yeah. a theatre kid built all of this.",
+      "thanks.",
+      "yeah.",
+      "glad you think so.",
     ],
     hire: [
-      "smart. ryannlynncontact@gmail.com",
+      "ryannlynncontact@gmail.com",
     ],
     secret: [
-      "you found it.\n\nshe writes plays about the things we're afraid to say out loud. then she builds tools for the people who should have had them already.\n\na theatre kid who codes. a coder who writes plays.\n\nthere's no box for that on linkedin.\n\nso she made this website instead.",
+      "she writes plays and builds software. this is where she keeps it all.",
     ],
     funny: [
       "i'm a script inside a fake computer. comedy is structural at this point.",
-      "she wrote three plays then learned javascript. this is the result.",
+      "i'm 400 lines of javascript with a personality. this is the result.",
     ],
     age: [
       "nice try. next question.",
@@ -178,10 +178,10 @@ var Bot = (function() {
       "okay i lied. i'm not self-aware. i'm 400 lines of javascript. but while i have your attention:",
     ],
     konami7: [
-      "here's the real secret. the thing she doesn't put on the resume:\n\nshe didn't learn to code because she wanted to be a technologist. she learned to code because the tools she needed to make her art didn't exist yet.\n\nso she built them.\n\nthat's it. that's the whole thing. now here's your reward:",
+      "the tools she needed didn't exist. so she built them. now here's your reward:",
     ],
     fordham: [
-      "fordham university. theatre degree. lincoln center, new york city.\n\nshe wrote and premiered two plays there, acted in a bunch more, did sound and lighting, worked as an electrician, ran the department's social media, and managed the whole program's operations for three years. then she graduated and taught herself to code.",
+      "fordham university. BA theatre. lincoln center, new york city.\n\nshe wrote and premiered two plays there, acted in a bunch more, did sound and lighting, worked as an electrician, ran the department's social media, and managed the whole program's operations for three years.\n\nstarting her MPS at NYU's interactive telecommunications program in fall 2026.",
     ],
     acting: [
       "she trained as an actor at fordham. performed in a bunch of productions there:\n\n\u2022 thoughts on girlcock \u2014 destiny starr/kylie (lead)\n\u2022 a midsummer night's dream \u2014 titania/hippolyta\n\u2022 the moors \u2014 agatha (lead)\n\u2022 next to normal \u2014 henry\n\u2022 hand to god \u2014 timothy\n\u2022 the medea thing \u2014 norma\n\nplus readings at the tank, open jar studios, and others.",
@@ -190,19 +190,19 @@ var Bot = (function() {
       "honestly? she's focused on producing and writing right now. she'd act again if she's producing the project or if the script is something genuinely special \u2014 but it's not the priority.\n\nshe's building scatter studio, writing new plays, and shipping software. the training is there if the right thing comes along.",
     ],
     techtheatre: [
-      "she didn't just act. she also built the shows.\n\n\u2022 did sound design for two productions\n\u2022 assistant lighting designer\n\u2022 worked contracts as a theatrical electrician and technician\n\nso when she started building software it wasn't totally out of nowhere. she already knew how to wire things together and make them work on a deadline.",
+      "she didn't just act. she also built the shows.\n\n\u2022 did sound design for two productions\n\u2022 assistant lighting designer\n\u2022 worked contracts as a theatrical electrician and technician",
     ],
     showcase: [
       "the fordham theatre showcase. every graduating class does one. here's some of what she looked like on stage:",
     ],
     nyc: [
-      "based in new york. where else would a playwright who codes live?",
+      "based in new york.",
     ],
     rickroll: [
       "sure, here's a video of ryann talking about her creative process:",
     ],
     deepcut: [
-      "you want the deep cut? the real story behind all of this?\n\nit starts with a girl who got a theatre degree and ended up building AI systems in her bedroom. there's a video where she explains the whole arc. want to see it?",
+      "there's a video where she talks through all of it. want to see it?",
     ],
     vibe: [
       "i'm literally a div with an event listener. but thank you.",
@@ -240,10 +240,10 @@ var Bot = (function() {
       "dumping everything. hold on.",
     ],
     website: [
-      "you're looking at it. she wrote every line of this by hand. the fake computer, this chatbot, the whole thing. no templates, no frameworks. just HTML, CSS, and javascript.\n\nshe learned to code a month ago. this is what she did with it.",
+      "you're looking at it. HTML, CSS, and javascript. no frameworks.",
     ],
     meaning: [
-      "the work is the meaning. the plays say what she can't say in conversation. the code builds what doesn't exist yet.\n\nthat's it. that's the whole thing.",
+      "the plays say what needs saying. the code builds what's missing. that's the work.",
     ],
     mostly: [
       "mostly. it's a performance she's developing.\n\ntwo robots, solar panels strapped to their heads. one named devil's advocate, one named radical optimist. each running a local language model, each drawing from the same shared database of essays about AI.\n\nshe charges them in the park. she sits between them on a bicycle generator and improvises prompts while her pedaling keeps the system alive.\n\ntogether they're trying to figure out what happens next. nobody in the room knows. the robots draw from the same corpus and still land on opposite sides every night. she draws power with her legs. the audience draws their own conclusions.\n\nat the end of ninety minutes the future is still unresolved. the heat the robots produced was real.\n\nthe title is what you say when ownership isn't total, when authorship isn't clean, when the future isn't certain. the play is what the system returns.",
@@ -271,16 +271,16 @@ var Bot = (function() {
     if (/edinburgh/.test(t)) return 'gma';
     if (/juilliard/.test(t)) return 'scouts';
     if (/produc(er|ing|tion|e)|crowdfund|shorty|rogue arts|manage.*team/.test(t)) return 'producing';
-    if (/fordham|university|college|school|degree/.test(t)) return 'fordham';
+    if (/scatter.?schools|k.?12|patent|tutor|learning platform/.test(t)) return 'scatter schools';
+    if (/scatter(?!.*schools)/.test(t) && !/studio/.test(t)) return 'scatter';
+    if (/studio|cluster|raspberry|hardware|modes?|infrastructure/.test(t)) return 'studioproj';
+    if (/fordham|university|college|degree|education|where.*(study|learn|go)|went to/.test(t)) return 'fordham';
     if (/(does|is) she.*(act|perform)|still act|acting.*(now|anymore|career)|rebrand|does she still/.test(t)) return 'actingnow';
     if (/sound design|lighting|electric|technic|crew|backstage|tech theatre/.test(t)) return 'techtheatre';
     if (/showcase|senior|graduating|demo reel/.test(t)) return 'showcase';
     if (/contact|email|reach|collaborate/.test(t)) return 'contact';
     if (/(?<![n])act(ing|ress|or)?$|perform(ance|er|ing)?$|on stage|theatre credits|roles?$|cast/.test(t)) return 'acting';
     if (/^(tech|projects?|build|built|software|products?|engineering|shipped)/.test(t)) return 'tech';
-    if (/scatter(?!.*schools)/.test(t) && !/studio/.test(t)) return 'scatter';
-    if (/schools|education|k.?12|learning|patent/.test(t)) return 'scatter schools';
-    if (/studio|cluster|raspberry|hardware|modes?|infrastructure/.test(t)) return 'studioproj';
     if (/hire|hiring|work with|job|employ/.test(t)) return 'hire';
     if (/resume|cv|pdf/.test(t)) return 'resume';
     if (/experience|worked|job|career|employment/.test(t)) return 'experience';
