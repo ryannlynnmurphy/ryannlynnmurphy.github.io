@@ -1,91 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Ryann Lynn Murphy — Playwright, Technologist, Nonprofit Founder</title>
-  <meta name="description" content="Ryann Lynn Murphy is a playwright, creative technologist, and founder of Scatter Computing, based in NYC.">
-  <link rel="canonical" href="https://ryannlynnmurphy.com/">
-  <!-- Open Graph -->
-  <meta property="og:title" content="Ryann Lynn Murphy — Playwright, Technologist, Nonprofit Founder">
-  <meta property="og:description" content="Playwright, technologist, and nonprofit founder, based in NYC.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ryannlynnmurphy.com/">
-  <meta property="og:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
-  <meta property="og:site_name" content="Ryann Lynn Murphy">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Ryann Lynn Murphy — Playwright, Technologist, Nonprofit Founder">
-  <meta name="twitter:description" content="Playwright, technologist, and nonprofit founder, based in NYC.">
-  <meta name="twitter:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Ryann Lynn Murphy",
-    "url": "https://ryannlynnmurphy.com",
-    "image": "https://ryannlynnmurphy.com/images/headshot-1.jpg",
-    "jobTitle": "Playwright / Technologist / Nonprofit Founder",
-    "description": "Playwright, technologist, and nonprofit founder.",
-    "sameAs": [
-      "https://github.com/ryannlynnmurphy",
-      "https://instagram.com/ryannlynnmurphy",
-      "https://tiktok.com/@ryannlynnmurphy",
-      "https://x.com/ryannlynnmurphy",
-      "https://ryannlynnmurphy.substack.com"
-    ]
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ryann Lynn Murphy</title>
+<meta name="description" content="Ryann Lynn Murphy — freelance creative producer, writer, and editor. New York.">
+<link rel="canonical" href="https://ryannlynnmurphy.com/">
+
+<meta property="og:title" content="Ryann Lynn Murphy">
+<meta property="og:description" content="Freelance creative producer, writer, and editor. New York.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ryannlynnmurphy.com/">
+<meta property="og:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
+<meta property="og:site_name" content="Ryann Lynn Murphy">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ryann Lynn Murphy">
+<meta name="twitter:description" content="Freelance creative producer, writer, and editor. New York.">
+<meta name="twitter:image" content="https://ryannlynnmurphy.com/images/headshot-1.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Ryann Lynn Murphy",
+  "url": "https://ryannlynnmurphy.com",
+  "image": "https://ryannlynnmurphy.com/images/headshot-1.jpg",
+  "jobTitle": "Creative Producer / Writer / Editor",
+  "description": "Freelance creative producer, writer, and editor. New York.",
+  "alumniOf": [
+    {"@type": "CollegeOrUniversity", "name": "Fordham University"},
+    {"@type": "CollegeOrUniversity", "name": "NYU ITP"}
+  ],
+  "sameAs": [
+    "https://github.com/ryannlynnmurphy",
+    "https://instagram.com/ryannlynnmurphy",
+    "https://ryannlynnmurphy.substack.com"
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --parchment: #f3ece1;
+    --ink:       #1a1612;
+    --ink-soft:  #6a6258;
+    --rule:      #cdc4b6;
   }
-  </script>
-  <link rel="stylesheet" href="css/theme.css?v=20260414">
-  <link rel="stylesheet" href="css/terminal.css?v=20260414">
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--parchment); }
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 21px;
+    line-height: 1.55;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  main {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 16vh 28px 20vh;
+  }
+
+  h1 {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+    margin-bottom: 0.35em;
+  }
+
+  .lede {
+    color: var(--ink-soft);
+    margin-bottom: 5em;
+  }
+
+  section { margin-bottom: 5em; }
+  p + p { margin-top: 1.1em; }
+
+  figure {
+    margin: 7em -28px;
+  }
+  figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  @media (min-width: 720px) {
+    figure { margin: 8em -60px; }
+  }
+  @media (min-width: 1000px) {
+    figure { margin: 9em -120px; }
+  }
+
+  figure.portrait {
+    margin: 6em auto;
+    max-width: 280px;
+  }
+
+  .links {
+    margin-top: 6em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1em 2em;
+  }
+  .links a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: border-color 180ms ease;
+  }
+  .links a:hover { border-bottom-color: var(--ink); }
+
+  .colophon {
+    margin-top: 9em;
+    color: var(--ink-soft);
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  ::selection { background: #e0d4bd; }
+</style>
 </head>
 <body>
 
-  <canvas id="rain" aria-hidden="true"></canvas>
-  <div class="scan-overlay" aria-hidden="true"></div>
+<main>
 
-  <div class="scene" id="scene">
-    <div class="computer">
-      <div class="monitor-body">
-        <div class="screen" id="screen">
-          <div class="screen-flash" id="flash"></div>
-          <div class="screen-glare"></div>
+  <h1>Ryann Lynn Murphy</h1>
+  <p class="lede">Freelance creative producer, writer, and editor. New York.</p>
 
-          <div class="screen-content" id="content">
-            <!-- Terminal output -->
-            <div class="terminal-output" id="output"></div>
+  <section>
+    <p>Three produced plays. BA Theatre, Fordham. Currently at NYU ITP.</p>
+  </section>
 
-            <!-- Input line -->
-            <div class="terminal-input-line" id="input-line" style="display:none;">
-              <span class="prompt">&gt;</span>
-              <input type="text" id="input" class="terminal-input" autocomplete="off" spellcheck="false">
-              <span class="cursor-blink">&#9608;</span>
-            </div>
-          </div>
-        </div>
-        <div class="power-led" id="led"></div>
-        <div class="monitor-brand">Scatter</div>
-      </div>
-      <div class="stand-neck"></div>
-      <div class="stand-base"></div>
-      <div class="desk"></div>
-      <div class="keyboard" aria-hidden="true">
-        <div class="key-row">
-          <div class="key"></div><div class="key"></div><div class="key"></div>
-          <div class="key"></div><div class="key"></div><div class="key"></div>
-          <div class="key"></div><div class="key"></div><div class="key"></div>
-          <div class="key"></div><div class="key"></div><div class="key"></div>
-          <div class="key"></div><div class="key"></div>
-          <div class="key spacebar"></div>
-          <div class="key"></div><div class="key"></div><div class="key"></div>
-        </div>
-      </div>
-    </div>
+  <figure class="portrait"><img src="images/headshot-1.jpg" alt=""></figure>
+
+  <section>
+    <p>Plays: <em>Scouts</em>, <em>Thoughts on Girlcock</em>, <em>Grooming My Ass</em>.</p>
+  </section>
+
+  <figure><img src="images/scouts/scouts.finals.llas-30.jpg" alt=""></figure>
+
+  <figure><img src="images/togc/3.jpeg" alt=""></figure>
+
+  <div class="links">
+    <a href="mailto:ryannlynncontact@gmail.com">email</a>
+    <a href="https://github.com/ryannlynnmurphy" rel="me">github</a>
+    <a href="https://ryannlynnmurphy.substack.com" rel="me">substack</a>
+    <a href="https://instagram.com/ryannlynnmurphy" rel="me">instagram</a>
   </div>
 
-  <script src="js/rain.js?v=20260414"></script>
-  <script src="js/bot.js?v=20260414"></script>
-  <script src="js/boot.js?v=20260414"></script>
+  <p class="colophon">2026 &middot; New York</p>
+
+</main>
+
 </body>
 </html>
