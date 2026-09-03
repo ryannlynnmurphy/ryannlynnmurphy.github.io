@@ -336,6 +336,33 @@ export function spaceState(scenario, year) {
   return { launch, orbital, lunar, mars, deep, domains, year, g };
 }
 
+/* -------------------------------------------------------------- borders */
+
+/**
+ * How contested the ground either side of a border point is, from 0 (quiet)
+ * to 1 (elevated conflict risk on at least one side). This never invents a
+ * border or moves one — it reads the same conflict-risk composite every
+ * other part of the interface uses, blended between the one or two nearest
+ * declared regions, and lets the renderer decide how to draw that.
+ */
+export function borderStability(scenario, year, lat, lng) {
+  const g = globalState(scenario, year);
+  let best = null, bestD = Infinity, second = null, secondD = Infinity;
+  for (const p of REGIONS) {
+    const dLat = lat - p.lat, dLng = (lng - p.lng) * Math.cos(lat * Math.PI / 180);
+    const d = Math.sqrt(dLat * dLat + dLng * dLng);
+    if (d < bestD) { second = best; secondD = bestD; best = p; bestD = d; }
+    else if (d < secondD) { second = p; secondD = d; }
+  }
+  if (!best) return 0;
+  const rBest = regionState(g, best);
+  if (!second || secondD > bestD * 2.4) return clamp01(rBest.index.conflict.value / 100);
+  const rSecond = regionState(g, second);
+  const wBest = 1 / (bestD + 0.25), wSecond = 1 / (secondD + 0.25);
+  const val = (rBest.index.conflict.value * wBest + rSecond.index.conflict.value * wSecond) / (wBest + wSecond);
+  return clamp01(val / 100);
+}
+
 /* -------------------------------------------------------- intersections */
 
 /** Regions where several layers are simultaneously elevated. */

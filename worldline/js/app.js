@@ -11,10 +11,10 @@ import { REGIONS, REGION_BY_ID, LAYERS, ASSUMPTIONS, PRESETS, SOURCES, NODE_BY_I
 import {
   baseScenario, globalState, regionState, activeSignals, signalById,
   timeStep, snapYear, horizonBand, yearToT, tToYear, MIN_YEAR, MAX_YEAR,
-  epistemic, EPISTEMIC_NOTE, spaceState, snapshot,
+  epistemic, EPISTEMIC_NOTE, spaceState, snapshot, borderStability,
 } from './model.js';
-import { loadGeo, Camera } from './geo.js';
-import { drawGlobe, drawHalo } from './geo.js';
+import { loadGeo, Camera, erodeLand } from './geo.js';
+import { drawGlobe, drawHalo, drawBorders } from './geo.js';
 import { drawSignals, drawSpace, drawStars, LAYER_COLOR } from './render.js';
 
 /* ------------------------------------------------------------------ state */
@@ -64,7 +64,22 @@ const THEME = {
   outline: 'rgba(226,222,214,0.16)',
   limb: 'rgba(226,222,214,0.10)',
   halo: 'rgba(120,140,160,0.10)',
+  retreatGhost: 'rgba(207,143,74,0.35)',
+  borderStable: 'rgba(226,222,214,0.16)',
 };
+
+/* ------------------------------------------------------------ coastline cache */
+
+let erosionCache = { key: null, rings: null };
+function currentErodedLand() {
+  if (!geo) return null;
+  const g = globalState(state.scenario, state.year);
+  const key = g.seaLevel.toFixed(3);
+  if (erosionCache.key !== key) {
+    erosionCache = { key, rings: erodeLand(geo.land, g.seaLevel) };
+  }
+  return erosionCache.rings;
+}
 
 /* -------------------------------------------------------------- pointer */
 
@@ -160,7 +175,14 @@ function frame(now) {
   drawStars(ctx, canvas.width / dpr, canvas.height / dpr, 0.5 + 0.5 * cam.pull);
   if (cam.pull > 0.02) drawHalo(ctx, cam, THEME, cam.pull);
 
-  if (geo) drawGlobe(ctx, cam, geo, THEME);
+  if (geo) {
+    drawGlobe(ctx, cam, geo, THEME, currentErodedLand());
+    const showStability = state.layers.has('conflict') || state.layers.has('power');
+    const stabilityFn = showStability
+      ? (lat, lng) => borderStability(state.scenario, state.year, lat, lng)
+      : () => 0;
+    drawBorders(ctx, cam, geo, stabilityFn, THEME, t);
+  }
 
   state.signals = activeSignals(state.scenario, state.year);
   const hitsA = drawSignals(ctx, cam, state, t, dt);
@@ -178,6 +200,7 @@ const yearLabel = document.getElementById('yearLabel');
 const yearInput = document.getElementById('yearInput');
 const horizonLabel = document.getElementById('horizonLabel');
 const stepLabel = document.getElementById('stepLabel');
+const seaLevelLabel = document.getElementById('seaLevelLabel');
 const deepBanner = document.getElementById('deepBanner');
 
 function setYear(y, snap = true) {
@@ -193,6 +216,8 @@ function setYear(y, snap = true) {
   stepLabel.textContent = stepDesc(state.year);
   deepBanner.hidden = band.id !== 'deep';
   document.body.dataset.horizon = band.id;
+  const g = globalState(state.scenario, state.year);
+  seaLevelLabel.textContent = `+${g.seaLevel.toFixed(2)}m SEA LEVEL · +${g.warming.toFixed(1)}°C`;
   if (state.selected) refreshPanel();
   renderLegendCounts();
 }

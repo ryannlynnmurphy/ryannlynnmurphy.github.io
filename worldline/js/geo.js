@@ -5,7 +5,15 @@
  * and the complexity should come from the signals drawn on it.
  *
  * Geometry: Natural Earth 1:110m, public domain, vendored in data/geo.json.
+ * `geo.lines` is the full coastline + border outline used for the base map.
+ * `geo.borders` is the subset of those arcs that are actually shared between
+ * two countries — i.e. real political boundaries, not coastline — recovered
+ * by counting how many country polygons in the source topology reference
+ * each arc. That split is what lets the border-stability overlay style only
+ * real borders instead of the whole coastline.
  */
+
+import { REGIONS } from './world.js';
 
 const RAD = Math.PI / 180;
 
@@ -99,6 +107,68 @@ export function greatCircle(lat1, lng1, lat2, lng2, n = 40) {
   return out;
 }
 
+/* ------------------------------------------------------------- coastline retreat
+ *
+ * A stylised, not surveyed, coastline. We have no elevation/bathymetry data
+ * (that would mean shipping a raster DEM), so retreat is approximated as an
+ * inward shift of each vertex, scaled by (a) the modelled sea-level rise for
+ * the current year/scenario and (b) how coastally exposed the nearest
+ * declared region is (its `coast` parameter in world.js, 0–1). This is
+ * honest about what it is: a legible, low-lying-areas-first visualisation
+ * driven by the same sea-level number the rest of the interface uses — not
+ * a claim about which specific parcel of land goes under first.
+ */
+
+const EXPOSURE_ANCHORS = REGIONS.map(r => ({ lat: r.lat, lng: r.lng, w: r.coast }));
+const EXPOSURE_FALLOFF_DEG = 13;      // ~1,400km — regional, not continental, spread
+const MAX_RETREAT_DEG = 2.0;          // upper bound at full exposure + full sea-level norm
+const SEA_LEVEL_NORM_M = 15;          // metres of modelled rise mapped to "1.0" of the scale
+
+function vertexExposure(lng, lat) {
+  let best = 0;
+  for (const a of EXPOSURE_ANCHORS) {
+    if (a.w <= 0.02) continue;
+    const dLat = lat - a.lat, dLng = (lng - a.lng) * Math.cos(lat * RAD);
+    const d = Math.sqrt(dLat * dLat + dLng * dLng);
+    const v = a.w * Math.exp(-d / EXPOSURE_FALLOFF_DEG);
+    if (v > best) best = v;
+  }
+  return best;
+}
+
+function ringSignedArea(ring) {
+  let a = 0;
+  for (let i = 0; i < ring.length; i++) {
+    const [x1, y1] = ring[i], [x2, y2] = ring[(i + 1) % ring.length];
+    a += x1 * y2 - x2 * y1;
+  }
+  return a / 2;
+}
+
+/** Erode land rings inward. `seaLevel` is metres above the 2000 baseline. */
+export function erodeLand(landRings, seaLevel) {
+  const norm = Math.max(0, Math.min(1, seaLevel / SEA_LEVEL_NORM_M));
+  if (norm < 0.004) return landRings;
+  return landRings.map(ring => {
+    const n = ring.length;
+    if (n < 4) return ring;
+    const inward = ringSignedArea(ring) >= 0 ? 1 : -1;   // sign of the left-hand normal
+    const out = new Array(n);
+    for (let i = 0; i < n; i++) {
+      const [lng, lat] = ring[i];
+      const [plng, plat] = ring[(i - 1 + n) % n];
+      const [nlng, nlat] = ring[(i + 1) % n];
+      let tx = nlng - plng, ty = nlat - plat;
+      const tl = Math.hypot(tx, ty) || 1;
+      tx /= tl; ty /= tl;
+      const nx = -ty * inward, ny = tx * inward;   // left-hand normal, sign-corrected
+      const shift = norm * vertexExposure(lng, lat) * MAX_RETREAT_DEG;
+      out[i] = [lng + nx * shift, lat + ny * shift];
+    }
+    return out;
+  });
+}
+
 /* ------------------------------------------------------------- graticule */
 
 const GRATICULE = (() => {
@@ -130,8 +200,10 @@ function strokeVisible(ctx, cam, pts, swapped) {
   }
 }
 
-export function drawGlobe(ctx, cam, geo, theme) {
+export function drawGlobe(ctx, cam, geo, theme, erodedLand) {
   const { cx, cy, R } = cam;
+  const landRings = erodedLand || geo.land;
+  const retreating = erodedLand && erodedLand !== geo.land;
 
   // Ocean body — a dark object, lit faintly from the upper left.
   const g = ctx.createRadialGradient(cx - R * 0.42, cy - R * 0.45, R * 0.06, cx, cy, R * 1.02);
@@ -144,8 +216,9 @@ export function drawGlobe(ctx, cam, geo, theme) {
   ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
 
   // Land — very slightly raised from the ocean, no borders in the fill pass.
+  // Under a retreated coastline, land uses the modelled (eroded) rings.
   ctx.beginPath();
-  for (const ring of geo.land) {
+  for (const ring of landRings) {
     for (let i = 0; i < ring.length; i++) {
       const q = cam.projectClamped(ring[i][1], ring[i][0]);
       if (i === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
@@ -154,6 +227,21 @@ export function drawGlobe(ctx, cam, geo, theme) {
   }
   ctx.fillStyle = theme.land;
   ctx.fill('evenodd');
+
+  // Where the coastline has retreated, show today's line as a ghost —
+  // the gap between the two is what has been lost.
+  if (retreating) {
+    ctx.beginPath();
+    for (const ring of geo.land) {
+      for (let i = 0; i < ring.length; i++) {
+        const q = cam.projectClamped(ring[i][1], ring[i][0]);
+        if (i === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+      }
+      ctx.closePath();
+    }
+    ctx.strokeStyle = theme.retreatGhost;
+    ctx.setLineDash([1.2, 2.4]); ctx.lineWidth = 0.6; ctx.stroke(); ctx.setLineDash([]);
+  }
 
   // Graticule beneath the outlines.
   ctx.beginPath();
@@ -172,6 +260,34 @@ export function drawGlobe(ctx, cam, geo, theme) {
   // Limb.
   ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
   ctx.strokeStyle = theme.limb; ctx.lineWidth = 0.8; ctx.stroke();
+}
+
+/**
+ * Border-stability overlay: real political-border arcs only (see the note
+ * at the top of this file), styled by how contested the ground either side
+ * of them is right now. `stabilityFn(midLat, midLng)` returns 0 (stable) to
+ * 1 (actively contested) and is supplied by the caller — this file only
+ * draws, it never decides what a border is worth.
+ */
+export function drawBorders(ctx, cam, geo, stabilityFn, theme, t) {
+  for (const seg of geo.borders) {
+    const midI = Math.floor(seg.length / 2);
+    const [midLng, midLat] = seg[midI];
+    const s = stabilityFn(midLat, midLng);
+
+    ctx.beginPath();
+    strokeVisible(ctx, cam, seg, true);
+    if (s < 0.16) {
+      ctx.strokeStyle = theme.borderStable;
+      ctx.lineWidth = 0.55;
+      ctx.stroke();
+    } else {
+      const pulse = 0.7 + 0.3 * Math.sin(t * 1.6 + midLat * 0.3);
+      ctx.strokeStyle = `rgba(196,88,74,${(0.18 + 0.55 * s) * pulse})`;
+      ctx.lineWidth = 0.6 + 1.6 * s;
+      ctx.stroke();
+    }
+  }
 }
 
 /** Faint atmospheric halo — drawn under the planet, only when pulled back. */

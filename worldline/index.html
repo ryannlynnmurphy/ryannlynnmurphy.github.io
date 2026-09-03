@@ -221,7 +221,9 @@
   }
   #yearInput:focus { outline: none; border-color: var(--ink-faint); color: var(--ink); }
   #horizonLabel { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-dim); cursor: help; }
-  #stepLabel { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); text-align: right; }
+  #worldStats { text-align: right; }
+  #stepLabel { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); }
+  #seaLevelLabel { font-family: var(--mono); font-size: 10px; color: rgba(207,143,74,0.75); margin-top: 3px; }
 
   #track { position: relative; height: 34px; cursor: pointer; }
   #trackLine { position: absolute; left: 0; right: 0; top: 16px; height: 1px; background: var(--rule); }
@@ -357,7 +359,10 @@
       <input id="yearInput" type="number" value="2038">
       <span id="horizonLabel"></span>
     </div>
-    <div id="stepLabel"></div>
+    <div id="worldStats">
+      <div id="stepLabel"></div>
+      <div id="seaLevelLabel" class="mono"></div>
+    </div>
   </div>
   <div id="track">
     <div id="trackLine"></div>
@@ -387,8 +392,12 @@
     <p>The sources are the evidence base the parameters were drawn from. They are not the origin of any specific probability shown here — that distinction matters, and the interface tries never to blur it.</p>
     <h4>UNCERTAINTY, DRAWN</h4>
     <p>Confidence falls the further a signal reaches into the future. A confident signal renders as a tight point; an uncertain one renders as a diffuse scatter with no clear center. You can see how much is known before you read a single number.</p>
+    <h4>THE COASTLINE</h4>
+    <p>There is no elevation or bathymetry data in this prototype — that would mean shipping a terrain model, not a cartographic outline. What you see instead is today's coastline shifted inward by an amount driven by two things you can already see elsewhere on the map: the modelled sea-level number in the corner, and how coastally exposed the nearest declared region is. The dotted ghost line is today's coastline, so the gap between the two lines is legible as loss. Treat the shape of the retreat as illustrative, not surveyed — it says "this kind of place, this much," not "this parcel, by this date."</p>
+    <h4>BORDER STABILITY</h4>
+    <p>Borders on this map are never redrawn — that is deliberate. Turn on POWER or CONFLICT and the real political-border lines recolor by the same conflict-risk composite used everywhere else in the interface, blended from the one or two nearest declared regions. A red, pulsing border means the ground on at least one side of it is under elevated modelled pressure — not that the line itself is expected to move.</p>
     <h4>WHAT IT WILL NEVER DO</h4>
-    <p>Name a war. State a date for one. Present a modeled output as measured fact. Every conflict signal is framed as elevated probability under current conditions — never as an event.</p>
+    <p>Name a war. State a date for one. Draw a new national border as a predicted outcome. Present a modeled output as measured fact. Every conflict signal is framed as elevated probability under current conditions — never as an event.</p>
     <button id="methodClose">CLOSE</button>
   </div>
 </div>

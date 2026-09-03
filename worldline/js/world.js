@@ -295,7 +295,7 @@ const ramp = (v, lo, hi) => clamp01((v - lo) / (hi - lo));
 
 export const SIGNALS = [
   {
-    id: 'arctic-shipping', layer: 'resources', region: 'arctic', from: 2030, to: 2200,
+    id: 'arctic-shipping', layer: 'resources', region: 'arctic', from: 2030, to: 10000,
     title: 'Trans-Arctic shipping season extends',
     kind: 'Route change',
     chain: ['warming', 'ice-loss', 'shipping', 'transport', 'strategic-salience', 'militarisation'],
@@ -304,7 +304,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming, 1.4, 3.0) * ramp(g.year, 2028, 2060) * (0.55 + 0.45 * g.s.trade),
   },
   {
-    id: 'arctic-competition', layer: 'conflict', region: 'arctic', from: 2035, to: 2200,
+    id: 'arctic-competition', layer: 'conflict', region: 'arctic', from: 2035, to: 10000,
     title: 'Arctic strategic competition intensifies',
     kind: 'Posture',
     chain: ['shipping', 'extraction', 'strategic-salience', 'militarisation', 'conflict-risk'],
@@ -313,7 +313,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming, 1.5, 3.2) * (0.4 + 0.6 * g.s.military) * ramp(g.year, 2032, 2070),
   },
   {
-    id: 'greenland-minerals', layer: 'resources', region: 'greenland', from: 2035, to: 2150,
+    id: 'greenland-minerals', layer: 'resources', region: 'greenland', from: 2035, to: 10000,
     title: 'High-latitude mineral access opens',
     kind: 'Extraction',
     chain: ['ice-loss', 'extraction', 'minerals', 'strategic-salience'],
@@ -322,7 +322,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming, 1.6, 3.0) * (0.35 + 0.65 * g.s.energy) * ramp(g.year, 2034, 2075),
   },
   {
-    id: 'permafrost-infra', layer: 'climate', region: 'siberia', from: 2030, to: 2150,
+    id: 'permafrost-infra', layer: 'climate', region: 'siberia', from: 2030, to: 10000,
     title: 'Permafrost thaw destabilises built infrastructure',
     kind: 'Infrastructure stress',
     chain: ['warming', 'ice-loss', 'infrastructure', 'economy'],
@@ -331,7 +331,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming * 2.4 / 1.35, 2.2, 5.0) * ramp(g.year, 2028, 2065),
   },
   {
-    id: 'med-water', layer: 'climate', region: 'mediterranean', from: 2028, to: 2200,
+    id: 'med-water', layer: 'climate', region: 'mediterranean', from: 2028, to: 10000,
     title: 'Mediterranean drying becomes structural',
     kind: 'Water',
     chain: ['warming', 'water-stress', 'crop-loss', 'food-insecurity', 'migration-pressure'],
@@ -340,7 +340,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(r.water, 55, 90) * ramp(g.warming, 1.3, 2.6),
   },
   {
-    id: 'levant-instability', layer: 'conflict', region: 'eastern-med', from: 2026, to: 2200,
+    id: 'levant-instability', layer: 'conflict', region: 'eastern-med', from: 2026, to: 10000,
     title: 'Compound pressure in the Eastern Mediterranean',
     kind: 'Instability',
     chain: ['water-stress', 'crop-loss', 'food-insecurity', 'instability', 'conflict-risk', 'displacement'],
@@ -349,7 +349,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.25 + 0.5 * ramp(r.water, 60, 95) + 0.3 * ramp(r.mil, 50, 90) - 0.3 * g.s.climate),
   },
   {
-    id: 'nile-delta-salt', layer: 'climate', region: 'nile-delta', from: 2035, to: 2300,
+    id: 'nile-delta-salt', layer: 'climate', region: 'nile-delta', from: 2035, to: 10000,
     title: 'Delta salinisation and coastal retreat',
     kind: 'Coastal',
     chain: ['sea-level', 'crop-loss', 'food-insecurity', 'migration-pressure', 'urbanisation'],
@@ -358,7 +358,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.seaLevel, 0.28, 0.95) * 0.92,
   },
   {
-    id: 'sahel-food', layer: 'climate', region: 'sahel', from: 2026, to: 2200,
+    id: 'sahel-food', layer: 'climate', region: 'sahel', from: 2026, to: 10000,
     title: 'Sahel food-system pressure',
     kind: 'Food security',
     chain: ['extreme-heat', 'water-stress', 'crop-loss', 'food-insecurity', 'instability', 'displacement'],
@@ -367,7 +367,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.35 + 0.45 * ramp(g.warming, 1.3, 2.8) + 0.2 * ramp(r.popIndex, 1.0, 2.2) - 0.25 * g.s.climate),
   },
   {
-    id: 'gulf-heat', layer: 'climate', region: 'gulf', from: 2035, to: 2300,
+    id: 'gulf-heat', layer: 'climate', region: 'gulf', from: 2035, to: 10000,
     title: 'Wet-bulb limits on outdoor labour',
     kind: 'Habitability',
     chain: ['warming', 'extreme-heat', 'infrastructure', 'adaptation'],
@@ -376,7 +376,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming, 1.5, 3.2) * 0.9,
   },
   {
-    id: 'gulf-transition', layer: 'power', region: 'gulf', from: 2035, to: 2150,
+    id: 'gulf-transition', layer: 'power', region: 'gulf', from: 2035, to: 10000,
     title: 'Hydrocarbon revenue base narrows',
     kind: 'Economic transition',
     chain: ['energy', 'economy', 'governance', 'strategic-salience'],
@@ -385,7 +385,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.s.energy, 0.3, 0.95) * ramp(g.year, 2035, 2075),
   },
   {
-    id: 'hormuz', layer: 'conflict', region: 'gulf', from: 2026, to: 2120,
+    id: 'hormuz', layer: 'conflict', region: 'gulf', from: 2026, to: 10000,
     title: 'Strait of Hormuz remains a concentrated risk',
     kind: 'Chokepoint',
     chain: ['chokepoint', 'transport', 'energy', 'conflict-risk'],
@@ -394,7 +394,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.7 * (1 - 0.55 * g.s.energy) * (0.5 + 0.5 * g.s.military)),
   },
   {
-    id: 'bab-el-mandeb', layer: 'conflict', region: 'red-sea', from: 2026, to: 2150,
+    id: 'bab-el-mandeb', layer: 'conflict', region: 'red-sea', from: 2026, to: 10000,
     title: 'Red Sea corridor exposure',
     kind: 'Chokepoint',
     chain: ['chokepoint', 'instability', 'transport', 'conflict-risk'],
@@ -403,7 +403,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.35 + 0.4 * ramp(100 - r.gov, 55, 85) + 0.25 * g.s.trade),
   },
   {
-    id: 'malacca', layer: 'resources', region: 'malacca', from: 2026, to: 2200,
+    id: 'malacca', layer: 'resources', region: 'malacca', from: 2026, to: 10000,
     title: 'Malacca concentration persists',
     kind: 'Chokepoint',
     chain: ['shipping', 'chokepoint', 'transport', 'economy', 'strategic-salience'],
@@ -412,7 +412,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.85 * (0.6 + 0.4 * g.s.trade) - 0.2 * ramp(g.warming, 1.6, 3.2)),
   },
   {
-    id: 'taiwan-tech', layer: 'power', region: 'taiwan-strait', from: 2026, to: 2100,
+    id: 'taiwan-tech', layer: 'power', region: 'taiwan-strait', from: 2026, to: 10000,
     title: 'Semiconductor concentration as strategic geography',
     kind: 'Technology',
     chain: ['technology', 'economy', 'strategic-salience', 'militarisation', 'conflict-risk'],
@@ -421,7 +421,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01((0.9 - 0.45 * ramp(g.year, 2026, 2065)) * (0.55 + 0.45 * g.s.ai)),
   },
   {
-    id: 'east-china-demog', layer: 'power', region: 'east-china', from: 2030, to: 2150,
+    id: 'east-china-demog', layer: 'power', region: 'east-china', from: 2030, to: 10000,
     title: 'Demographic contraction reshapes economic weight',
     kind: 'Demographics',
     chain: ['population', 'labour-gap', 'economy', 'strategic-salience'],
@@ -430,7 +430,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.year, 2030, 2075) * (1 - 0.45 * g.s.ai),
   },
   {
-    id: 'korea-japan-demog', layer: 'migration', region: 'korea-japan', from: 2026, to: 2120,
+    id: 'korea-japan-demog', layer: 'migration', region: 'korea-japan', from: 2026, to: 10000,
     title: 'Structural labour shortfall',
     kind: 'Demographics',
     chain: ['population', 'labour-gap', 'migration-pressure', 'economy'],
@@ -439,7 +439,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.5 + 0.4 * ramp(g.year, 2026, 2070) - 0.35 * g.s.ai),
   },
   {
-    id: 'third-pole', layer: 'climate', region: 'himalaya', from: 2030, to: 2250,
+    id: 'third-pole', layer: 'climate', region: 'himalaya', from: 2030, to: 10000,
     title: 'Cryosphere loss changes downstream flow regimes',
     kind: 'Water',
     chain: ['warming', 'ice-loss', 'water-stress', 'crop-loss', 'territorial'],
@@ -448,7 +448,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming * 2.1 / 1.35, 2.0, 4.6) * ramp(g.year, 2030, 2080),
   },
   {
-    id: 'indo-gangetic', layer: 'climate', region: 'south-asia', from: 2030, to: 2200,
+    id: 'indo-gangetic', layer: 'climate', region: 'south-asia', from: 2030, to: 10000,
     title: 'Groundwater depletion under heat',
     kind: 'Water',
     chain: ['extreme-heat', 'water-stress', 'crop-loss', 'food-insecurity', 'migration-pressure'],
@@ -457,7 +457,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.4 + 0.45 * ramp(r.water, 70, 96) + 0.2 * ramp(g.warming, 1.4, 2.8) - 0.25 * g.s.climate),
   },
   {
-    id: 'bengal-exposure', layer: 'migration', region: 'bengal-delta', from: 2035, to: 2300,
+    id: 'bengal-exposure', layer: 'migration', region: 'bengal-delta', from: 2035, to: 10000,
     title: 'Delta exposure drives internal displacement',
     kind: 'Displacement',
     chain: ['sea-level', 'displacement', 'urbanisation', 'infrastructure'],
@@ -466,7 +466,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.seaLevel, 0.3, 1.1) * 0.95,
   },
   {
-    id: 'pacific-habitability', layer: 'climate', region: 'pacific-islands', from: 2035, to: 2300,
+    id: 'pacific-habitability', layer: 'climate', region: 'pacific-islands', from: 2035, to: 10000,
     title: 'Freshwater lens failure precedes inundation',
     kind: 'Habitability',
     chain: ['sea-level', 'water-stress', 'displacement', 'accession'],
@@ -475,7 +475,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.seaLevel, 0.3, 0.9) * 0.98,
   },
   {
-    id: 'amazon-threshold', layer: 'climate', region: 'amazon', from: 2040, to: 2250,
+    id: 'amazon-threshold', layer: 'climate', region: 'amazon', from: 2040, to: 10000,
     title: 'Forest–savanna transition risk',
     kind: 'System state change',
     chain: ['warming', 'crop-loss', 'water-stress', 'food-insecurity'],
@@ -485,7 +485,7 @@ export const SIGNALS = [
     confidencePenalty: 0.55,
   },
   {
-    id: 'andes-minerals', layer: 'resources', region: 'andes', from: 2028, to: 2150,
+    id: 'andes-minerals', layer: 'resources', region: 'andes', from: 2028, to: 10000,
     title: 'Transition minerals meet water scarcity',
     kind: 'Extraction',
     chain: ['minerals', 'extraction', 'water-stress', 'instability'],
@@ -494,7 +494,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.3 + 0.55 * g.s.energy) * ramp(g.year, 2028, 2060),
   },
   {
-    id: 'congo-minerals', layer: 'resources', region: 'congo-basin', from: 2026, to: 2150,
+    id: 'congo-minerals', layer: 'resources', region: 'congo-basin', from: 2026, to: 10000,
     title: 'Extraction concentration without processing',
     kind: 'Resource network',
     chain: ['minerals', 'extraction', 'transport', 'processing', 'economy', 'governance'],
@@ -503,7 +503,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.45 + 0.45 * g.s.energy),
   },
   {
-    id: 'us-southwest-water', layer: 'climate', region: 'us-southwest', from: 2026, to: 2200,
+    id: 'us-southwest-water', layer: 'climate', region: 'us-southwest', from: 2026, to: 10000,
     title: 'Allocated water exceeds available water',
     kind: 'Water',
     chain: ['warming', 'water-stress', 'crop-loss', 'urbanisation', 'adaptation'],
@@ -512,7 +512,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.4 + 0.45 * ramp(g.warming, 1.3, 2.6) - 0.3 * g.s.climate),
   },
   {
-    id: 'gulf-coast-exposure', layer: 'climate', region: 'gulf-coast', from: 2030, to: 2250,
+    id: 'gulf-coast-exposure', layer: 'climate', region: 'gulf-coast', from: 2030, to: 10000,
     title: 'Coastal energy infrastructure exposure',
     kind: 'Infrastructure stress',
     chain: ['sea-level', 'infrastructure', 'energy', 'economy'],
@@ -521,7 +521,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.seaLevel, 0.28, 0.9) * 0.85,
   },
   {
-    id: 'northern-gain', layer: 'resources', region: 'canada-north', from: 2040, to: 2250,
+    id: 'northern-gain', layer: 'resources', region: 'canada-north', from: 2040, to: 10000,
     title: 'Northward drift of crop suitability',
     kind: 'Agriculture',
     chain: ['warming', 'crop-loss', 'infrastructure', 'economy'],
@@ -530,7 +530,7 @@ export const SIGNALS = [
     p: (g, r) => ramp(g.warming, 1.8, 3.4) * ramp(g.year, 2040, 2100),
   },
   {
-    id: 'panama-water', layer: 'resources', region: 'panama', from: 2028, to: 2150,
+    id: 'panama-water', layer: 'resources', region: 'panama', from: 2028, to: 10000,
     title: 'Canal throughput constrained by freshwater',
     kind: 'Chokepoint',
     chain: ['water-stress', 'shipping', 'transport', 'chokepoint', 'economy'],
@@ -539,7 +539,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.35 + 0.45 * ramp(g.warming, 1.3, 2.8)) * (0.6 + 0.4 * g.s.trade),
   },
   {
-    id: 'black-sea-grain', layer: 'conflict', region: 'black-sea', from: 2026, to: 2120,
+    id: 'black-sea-grain', layer: 'conflict', region: 'black-sea', from: 2026, to: 10000,
     title: 'Grain corridor exposure',
     kind: 'Chokepoint',
     chain: ['conflict-risk', 'transport', 'food-insecurity', 'instability'],
@@ -548,7 +548,7 @@ export const SIGNALS = [
     p: (g, r) => clamp01(0.3 + 0.5 * ramp(r.mil, 60, 95) + 0.2 * (1 - g.s.trade)),
   },
   {
-    id: 'leo-congestion', layer: 'space', region: null, from: 2026, to: 2200,
+    id: 'leo-congestion', layer: 'space', region: null, from: 2026, to: 10000,
     title: 'Low Earth orbit congestion',
     kind: 'Orbital',
     chain: ['launch', 'orbital', 'navigation', 'economy'],
@@ -558,7 +558,7 @@ export const SIGNALS = [
     orbit: 'leo',
   },
   {
-    id: 'navigation-dependency', layer: 'space', region: null, from: 2026, to: 2250,
+    id: 'navigation-dependency', layer: 'space', region: null, from: 2026, to: 10000,
     title: 'Navigation and timing as critical infrastructure',
     kind: 'Orbital',
     chain: ['orbital', 'navigation', 'transport', 'economy', 'militarisation'],
@@ -568,7 +568,7 @@ export const SIGNALS = [
     orbit: 'meo',
   },
   {
-    id: 'lunar-surface', layer: 'space', region: null, from: 2035, to: 2400,
+    id: 'lunar-surface', layer: 'space', region: null, from: 2035, to: 10000,
     title: 'Sustained lunar surface infrastructure',
     kind: 'Lunar',
     chain: ['launch', 'orbital', 'lunar', 'accession'],
@@ -578,7 +578,7 @@ export const SIGNALS = [
     body_: 'moon', confidencePenalty: 0.7,
   },
   {
-    id: 'cislunar-competition', layer: 'space', region: null, from: 2045, to: 2400,
+    id: 'cislunar-competition', layer: 'space', region: null, from: 2045, to: 10000,
     title: 'Cislunar space acquires strategic geography',
     kind: 'Lunar',
     chain: ['lunar', 'strategic-salience', 'militarisation', 'territorial'],
@@ -588,7 +588,7 @@ export const SIGNALS = [
     body_: 'moon', confidencePenalty: 0.55,
   },
   {
-    id: 'mars-presence', layer: 'space', region: null, from: 2060, to: 2500,
+    id: 'mars-presence', layer: 'space', region: null, from: 2060, to: 10000,
     title: 'Persistent Mars surface presence',
     kind: 'Planetary',
     chain: ['lunar', 'planetary', 'accession'],
@@ -598,7 +598,7 @@ export const SIGNALS = [
     body_: 'mars', confidencePenalty: 0.35,
   },
   {
-    id: 'orbital-industry', layer: 'space', region: null, from: 2090, to: 2600,
+    id: 'orbital-industry', layer: 'space', region: null, from: 2090, to: 10000,
     title: 'Off-Earth production becomes self-sustaining',
     kind: 'Planetary',
     chain: ['lunar', 'planetary', 'minerals', 'economy', 'accession'],
@@ -606,6 +606,36 @@ export const SIGNALS = [
     sources: ['nasa_m2m', 'unoosa'],
     p: (g, r) => ramp(g.s.space, 0.6, 1.0) * ramp(g.year, 2085, 2250),
     body_: 'moon', confidencePenalty: 0.2,
+  },
+  {
+    id: 'sea-level-commitment', layer: 'climate', region: null, from: 2600, to: 10000,
+    title: 'Multi-century sea-level commitment approaches full realisation',
+    kind: 'Committed change',
+    chain: ['warming', 'ice-loss', 'sea-level', 'displacement'],
+    body: 'Ice-sheet response to warming plays out over centuries to millennia, long after the temperature that caused it has stopped rising. What this era mostly is is not new warming — it is the slow arrival of change that earlier centuries already committed to.',
+    sources: ['ipcc_wg1', 'noaa_slr'],
+    p: (g, r) => ramp(g.year, 2600, 4200) * ramp(g.warming, 1.6, 4.0),
+    confidencePenalty: 0.4,
+  },
+  {
+    id: 'offworld-demographic', layer: 'space', region: null, from: 3000, to: 10000,
+    title: 'Off-world population becomes demographically real',
+    kind: 'Planetary',
+    chain: ['lunar', 'planetary', 'accession'],
+    body: 'Not a colony in the old sense — a population that is born, works, and dies without having been to Earth. Nothing in the near-term data speaks to this; it is included because the model\'s own logic (sustained presence, then production, then reproduction) leads here, not because any dataset does.',
+    sources: ['nasa_m2m'],
+    p: (g, r) => ramp(g.s.space, 0.65, 1.0) * ramp(g.year, 3000, 6000),
+    body_: 'mars', confidencePenalty: 0.12,
+  },
+  {
+    id: 'deep-governance', layer: 'power', region: null, from: 5000, to: 10000,
+    title: 'Governance consolidates or fragments at civilisational scale',
+    kind: 'Structure',
+    chain: ['strategic-salience', 'alliances', 'governance', 'instability'],
+    body: 'At this distance the model can no longer distinguish a specific outcome from its opposite — only that trade openness and military restraint are the two variables it has that plausibly matter at all across a horizon this long. Read this signal as a statement about which levers still mean something in the deep future, not as a claim about which way they will go.',
+    sources: ['wdi', 'sipri'],
+    p: (g, r) => clamp01(0.5 + 0.3 * (g.s.trade - 0.5) - 0.3 * (g.s.military - 0.5)),
+    confidencePenalty: 0.08,
   },
 ];
 
