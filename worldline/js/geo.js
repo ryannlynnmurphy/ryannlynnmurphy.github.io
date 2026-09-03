@@ -13,7 +13,7 @@
  * real borders instead of the whole coastline.
  */
 
-import { REGIONS } from './world.js';
+import { REGIONS, REGION_BY_ID } from './world.js';
 
 const RAD = Math.PI / 180;
 
@@ -121,8 +121,8 @@ export function greatCircle(lat1, lng1, lat2, lng2, n = 40) {
 
 const EXPOSURE_ANCHORS = REGIONS.map(r => ({ lat: r.lat, lng: r.lng, w: r.coast }));
 const EXPOSURE_FALLOFF_DEG = 13;      // ~1,400km — regional, not continental, spread
-const MAX_RETREAT_DEG = 2.0;          // upper bound at full exposure + full sea-level norm
-const SEA_LEVEL_NORM_M = 15;          // metres of modelled rise mapped to "1.0" of the scale
+const MAX_RETREAT_DEG = 3.2;          // upper bound at full exposure + full sea-level norm
+const SEA_LEVEL_NORM_M = 5;           // metres of modelled rise mapped to "1.0" of the scale
 
 function vertexExposure(lng, lat) {
   let best = 0;
@@ -145,9 +145,15 @@ function ringSignedArea(ring) {
   return a / 2;
 }
 
-/** Erode land rings inward. `seaLevel` is metres above the 2000 baseline. */
+/**
+ * Erode land rings inward. `seaLevel` is metres above the 2000 baseline.
+ * The response is deliberately front-loaded (sqrt, not linear) against a
+ * 5m — not 15m — norm: a real map has to show *something* moving well
+ * before the multi-metre, multi-century commitment fully lands, or the
+ * retreat reads as inert for the entire near and mid term.
+ */
 export function erodeLand(landRings, seaLevel) {
-  const norm = Math.max(0, Math.min(1, seaLevel / SEA_LEVEL_NORM_M));
+  const norm = Math.sqrt(Math.max(0, Math.min(1, seaLevel / SEA_LEVEL_NORM_M)));
   if (norm < 0.004) return landRings;
   return landRings.map(ring => {
     const n = ring.length;
@@ -167,6 +173,22 @@ export function erodeLand(landRings, seaLevel) {
     }
     return out;
   });
+}
+
+/**
+ * The band of land between today's coastline and the eroded one, as one
+ * closed ring per pair — i.e. exactly what the sea-level number claims is
+ * newly underwater. Filling this in a distinct color is what makes the
+ * change legible at a glance instead of a several-pixel line nudge.
+ */
+export function floodBands(landRings, erodedRings) {
+  const bands = [];
+  for (let i = 0; i < landRings.length; i++) {
+    const orig = landRings[i], eroded = erodedRings[i];
+    if (orig === eroded || orig.length < 4) continue;
+    bands.push(orig.concat(eroded.slice().reverse()));
+  }
+  return bands;
 }
 
 /* ------------------------------------------------------------- graticule */
@@ -200,7 +222,7 @@ function strokeVisible(ctx, cam, pts, swapped) {
   }
 }
 
-export function drawGlobe(ctx, cam, geo, theme, erodedLand) {
+export function drawGlobe(ctx, cam, geo, theme, erodedLand, floodBandRings) {
   const { cx, cy, R } = cam;
   const landRings = erodedLand || geo.land;
   const retreating = erodedLand && erodedLand !== geo.land;
@@ -228,9 +250,21 @@ export function drawGlobe(ctx, cam, geo, theme, erodedLand) {
   ctx.fillStyle = theme.land;
   ctx.fill('evenodd');
 
-  // Where the coastline has retreated, show today's line as a ghost —
-  // the gap between the two is what has been lost.
-  if (retreating) {
+  // The flood band — today's land that the modelled sea level now claims.
+  // A filled color reads at any zoom; a retreated outline alone does not.
+  if (retreating && floodBandRings && floodBandRings.length) {
+    ctx.beginPath();
+    for (const band of floodBandRings) {
+      for (let i = 0; i < band.length; i++) {
+        const q = cam.projectClamped(band[i][1], band[i][0]);
+        if (i === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+      }
+      ctx.closePath();
+    }
+    ctx.fillStyle = theme.flood;
+    ctx.fill('nonzero');
+
+    // Today's coastline, kept visible as a ghost so the loss reads as loss.
     ctx.beginPath();
     for (const ring of geo.land) {
       for (let i = 0; i < ring.length; i++) {
@@ -240,7 +274,7 @@ export function drawGlobe(ctx, cam, geo, theme, erodedLand) {
       ctx.closePath();
     }
     ctx.strokeStyle = theme.retreatGhost;
-    ctx.setLineDash([1.2, 2.4]); ctx.lineWidth = 0.6; ctx.stroke(); ctx.setLineDash([]);
+    ctx.setLineDash([1.2, 2.4]); ctx.lineWidth = 0.7; ctx.stroke(); ctx.setLineDash([]);
   }
 
   // Graticule beneath the outlines.
@@ -287,6 +321,59 @@ export function drawBorders(ctx, cam, geo, stabilityFn, theme, t) {
       ctx.lineWidth = 0.6 + 1.6 * s;
       ctx.stroke();
     }
+  }
+}
+
+const MAX_TERRITORY_SHIFT_DEG = 4.2;   // ~470km at full modeled magnitude — visible planet-wide
+const TERRITORY_SHIFT_THRESHOLD = 0.06;
+
+/**
+ * Speculative redrawn territory: openly invented, not derived. For each real
+ * border segment, `shiftFn(midLat, midLng)` returns which of the two
+ * neighboring regions the model's power/conflict differential currently
+ * favors and by how much (see model.js:territorialShift for the exact
+ * mechanism). Below threshold, only today's real border is drawn. Above it,
+ * the segment is offset toward the weaker region and the band between the
+ * real and speculative lines is filled — clearly dashed, clearly a
+ * different color family from the border-stability overlay, and always
+ * drawn alongside the real line so "speculative" and "actual" are never
+ * the same mark.
+ */
+export function drawTerritorialShifts(ctx, cam, geo, shiftFn, theme, t) {
+  for (const seg of geo.borders) {
+    const midI = Math.floor(seg.length / 2);
+    const [midLng, midLat] = seg[midI];
+    const shift = shiftFn(midLat, midLng);
+    if (!shift || shift.magnitude < TERRITORY_SHIFT_THRESHOLD) continue;
+
+    const target = REGION_BY_ID[shift.against];
+    if (!target) continue;
+    let dLat = target.lat - midLat, dLng = (target.lng - midLng);
+    const dl = Math.hypot(dLat, dLng) || 1;
+    dLat /= dl; dLng /= dl;
+    const mag = shift.magnitude * MAX_TERRITORY_SHIFT_DEG;
+    const shifted = seg.map(([lng, lat]) => [lng + dLng * mag, lat + dLat * mag]);
+
+    // The claimed band.
+    ctx.beginPath();
+    const band = seg.concat(shifted.slice().reverse());
+    for (let i = 0; i < band.length; i++) {
+      const q = cam.projectClamped(band[i][1], band[i][0]);
+      if (i === 0) ctx.moveTo(q.x, q.y); else ctx.lineTo(q.x, q.y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = `rgba(206,120,158,${0.14 + 0.22 * shift.magnitude})`;
+    ctx.fill();
+
+    // The speculative line itself.
+    const pulse = 0.75 + 0.25 * Math.sin(t * 1.2 + midLng * 0.4);
+    ctx.beginPath();
+    strokeVisible(ctx, cam, shifted, true);
+    ctx.strokeStyle = `rgba(206,120,158,${(0.5 + 0.45 * shift.magnitude) * pulse})`;
+    ctx.lineWidth = 1.1 + 1.6 * shift.magnitude;
+    ctx.setLineDash([3, 2.4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
   }
 }
 

@@ -338,6 +338,17 @@ export function spaceState(scenario, year) {
 
 /* -------------------------------------------------------------- borders */
 
+function nearestTwoRegions(lat, lng) {
+  let best = null, bestD = Infinity, second = null, secondD = Infinity;
+  for (const p of REGIONS) {
+    const dLat = lat - p.lat, dLng = (lng - p.lng) * Math.cos(lat * Math.PI / 180);
+    const d = Math.sqrt(dLat * dLat + dLng * dLng);
+    if (d < bestD) { second = best; secondD = bestD; best = p; bestD = d; }
+    else if (d < secondD) { second = p; secondD = d; }
+  }
+  return { best, bestD, second, secondD };
+}
+
 /**
  * How contested the ground either side of a border point is, from 0 (quiet)
  * to 1 (elevated conflict risk on at least one side). This never invents a
@@ -347,13 +358,7 @@ export function spaceState(scenario, year) {
  */
 export function borderStability(scenario, year, lat, lng) {
   const g = globalState(scenario, year);
-  let best = null, bestD = Infinity, second = null, secondD = Infinity;
-  for (const p of REGIONS) {
-    const dLat = lat - p.lat, dLng = (lng - p.lng) * Math.cos(lat * Math.PI / 180);
-    const d = Math.sqrt(dLat * dLat + dLng * dLng);
-    if (d < bestD) { second = best; secondD = bestD; best = p; bestD = d; }
-    else if (d < secondD) { second = p; secondD = d; }
-  }
+  const { best, bestD, second, secondD } = nearestTwoRegions(lat, lng);
   if (!best) return 0;
   const rBest = regionState(g, best);
   if (!second || secondD > bestD * 2.4) return clamp01(rBest.index.conflict.value / 100);
@@ -361,6 +366,31 @@ export function borderStability(scenario, year, lat, lng) {
   const wBest = 1 / (bestD + 0.25), wSecond = 1 / (secondD + 0.25);
   const val = (rBest.index.conflict.value * wBest + rSecond.index.conflict.value * wSecond) / (wBest + wSecond);
   return clamp01(val / 100);
+}
+
+/**
+ * A speculative territorial shift at a border point: which of the two
+ * neighboring regions the model's own power/conflict differential favors,
+ * and by how much (0 = no shift, 1 = maximum modeled shift). This is
+ * openly invented geography, not a derived fact — it exists because you
+ * asked to see borders actually move under conflict, and the alternative
+ * (silence) was less honest than a clearly labeled, clearly mechanical
+ * extrapolation. The direction always points from the higher-power,
+ * lower-domestic-conflict side toward the weaker one; the magnitude is
+ * gated by how much elevated conflict risk actually exists there and by
+ * how far into the scenario/speculative era the year already is — near
+ * term (pre-2050) this is deliberately almost never visible.
+ */
+export function territorialShift(scenario, year, lat, lng) {
+  const g = globalState(scenario, year);
+  const { best: a, second: b } = nearestTwoRegions(lat, lng);
+  if (!a || !b) return { magnitude: 0 };
+  const rA = regionState(g, a), rB = regionState(g, b);
+  const conflictFactor = clamp01((rA.index.conflict.value + rB.index.conflict.value) / 2 / 100);
+  const powerDiff = rA.index.power.value - rB.index.power.value;    // >0: A is stronger
+  const timeFactor = ramp(year, 2040, 2200);
+  const magnitude = clamp01(Math.abs(powerDiff) / 55) * conflictFactor * timeFactor;
+  return { magnitude, favors: powerDiff >= 0 ? a.id : b.id, against: powerDiff >= 0 ? b.id : a.id, a, b, conflictFactor };
 }
 
 /* -------------------------------------------------------- intersections */

@@ -11,10 +11,10 @@ import { REGIONS, REGION_BY_ID, LAYERS, ASSUMPTIONS, PRESETS, SOURCES, NODE_BY_I
 import {
   baseScenario, globalState, regionState, activeSignals, signalById,
   timeStep, snapYear, horizonBand, yearToT, tToYear, MIN_YEAR, MAX_YEAR,
-  epistemic, EPISTEMIC_NOTE, spaceState, snapshot, borderStability,
+  epistemic, EPISTEMIC_NOTE, spaceState, snapshot, borderStability, territorialShift,
 } from './model.js';
-import { loadGeo, Camera, erodeLand } from './geo.js';
-import { drawGlobe, drawHalo, drawBorders } from './geo.js';
+import { loadGeo, Camera, erodeLand, floodBands } from './geo.js';
+import { drawGlobe, drawHalo, drawBorders, drawTerritorialShifts } from './geo.js';
 import { drawSignals, drawSpace, drawStars, LAYER_COLOR } from './render.js';
 
 /* ------------------------------------------------------------------ state */
@@ -64,21 +64,23 @@ const THEME = {
   outline: 'rgba(226,222,214,0.16)',
   limb: 'rgba(226,222,214,0.10)',
   halo: 'rgba(120,140,160,0.10)',
-  retreatGhost: 'rgba(207,143,74,0.35)',
+  retreatGhost: 'rgba(120,170,196,0.55)',
+  flood: 'rgba(84,138,168,0.34)',
   borderStable: 'rgba(226,222,214,0.16)',
 };
 
 /* ------------------------------------------------------------ coastline cache */
 
-let erosionCache = { key: null, rings: null };
-function currentErodedLand() {
-  if (!geo) return null;
+let erosionCache = { key: null, rings: null, bands: null };
+function currentErosion() {
+  if (!geo) return { rings: null, bands: null };
   const g = globalState(state.scenario, state.year);
   const key = g.seaLevel.toFixed(3);
   if (erosionCache.key !== key) {
-    erosionCache = { key, rings: erodeLand(geo.land, g.seaLevel) };
+    const rings = erodeLand(geo.land, g.seaLevel);
+    erosionCache = { key, rings, bands: floodBands(geo.land, rings) };
   }
-  return erosionCache.rings;
+  return erosionCache;
 }
 
 /* -------------------------------------------------------------- pointer */
@@ -176,12 +178,17 @@ function frame(now) {
   if (cam.pull > 0.02) drawHalo(ctx, cam, THEME, cam.pull);
 
   if (geo) {
-    drawGlobe(ctx, cam, geo, THEME, currentErodedLand());
+    const erosion = currentErosion();
+    drawGlobe(ctx, cam, geo, THEME, erosion.rings, erosion.bands);
     const showStability = state.layers.has('conflict') || state.layers.has('power');
     const stabilityFn = showStability
       ? (lat, lng) => borderStability(state.scenario, state.year, lat, lng)
       : () => 0;
     drawBorders(ctx, cam, geo, stabilityFn, THEME, t);
+    if (state.layers.has('conflict')) {
+      const shiftFn = (lat, lng) => territorialShift(state.scenario, state.year, lat, lng);
+      drawTerritorialShifts(ctx, cam, geo, shiftFn, THEME, t);
+    }
   }
 
   state.signals = activeSignals(state.scenario, state.year);
