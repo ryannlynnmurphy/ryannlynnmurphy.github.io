@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>WORLDLINE — A Temporal Map of Possible Futures</title>
+<meta name="description" content="An interactive temporal map for exploring how climate, conflict, migration, resources, power, and space interact to produce possible futures — 2026 to the deep future.">
+<link rel="canonical" href="https://ryannlynnmurphy.com/worldline/">
+
+<style>
+  :root {
+    --bg: #0b0c0e;
+    --ink: #e7e3da;
+    --ink-dim: rgba(231,227,218,0.55);
+    --ink-faint: rgba(231,227,218,0.32);
+    --rule: rgba(231,227,218,0.12);
+    --rule-soft: rgba(231,227,218,0.07);
+    --panel-bg: rgba(14,15,17,0.92);
+    --mono: ui-monospace, 'SF Mono', Menlo, 'JetBrains Mono', Consolas, monospace;
+    --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --power: 185,160,107;
+    --conflict: 196,88,74;
+    --climate: 207,143,74;
+    --migration: 111,159,181;
+    --resources: 127,160,106;
+    --space: 148,145,200;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); overflow: hidden; height: 100%; }
+  body {
+    font-family: var(--serif);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage { position: fixed; inset: 0; }
+  #globe { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+
+  .mono { font-family: var(--mono); letter-spacing: 0.02em; }
+
+  /* ---------- top identity ---------- */
+  #brand {
+    position: fixed; top: 26px; left: 28px; z-index: 20;
+    pointer-events: none;
+  }
+  #brand .title { font-family: var(--mono); font-size: 13px; letter-spacing: 0.22em; font-weight: 500; }
+  #brand .sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--ink-faint); margin-top: 4px; }
+
+  #methodBtn {
+    position: fixed; top: 26px; right: 28px; z-index: 25;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+    color: var(--ink-dim); background: none; border: 1px solid var(--rule);
+    padding: 6px 11px; cursor: pointer;
+  }
+  #methodBtn:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+  /* ---------- search ---------- */
+  .searchWrap { position: fixed; top: 26px; left: 50%; transform: translateX(-50%); z-index: 25; width: min(360px, 40vw); }
+  #searchInput {
+    width: 100%; background: rgba(11,12,14,0.7); border: 1px solid var(--rule); color: var(--ink);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 8px 12px;
+    outline: none;
+  }
+  #searchInput::placeholder { color: var(--ink-faint); }
+  #searchInput:focus { border-color: var(--ink-faint); }
+  #searchResults {
+    position: absolute; top: 100%; margin-top: 6px; left: 0; right: 0;
+    background: var(--panel-bg); border: 1px solid var(--rule); max-height: 40vh; overflow-y: auto;
+  }
+  .searchRow { display: flex; justify-content: space-between; gap: 10px; padding: 9px 12px; cursor: pointer; border-bottom: 1px solid var(--rule-soft); font-size: 13px; }
+  .searchRow:hover { background: rgba(231,227,218,0.05); }
+  .searchSub { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); white-space: nowrap; }
+  .searchEmpty { padding: 12px; color: var(--ink-faint); font-family: var(--mono); font-size: 11px; }
+
+  /* ---------- left: layers ---------- */
+  #layerDock { position: fixed; top: 90px; left: 28px; z-index: 20; width: 200px; }
+  .dockLabel { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint); margin-bottom: 10px; }
+  .layerRow {
+    display: flex; align-items: center; gap: 9px; width: 100%; background: none; border: none; color: var(--ink-dim);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; padding: 7px 0; cursor: pointer; text-align: left;
+  }
+  .layerRow .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(var(--c), 0.25); flex-shrink: 0; transition: background 200ms; }
+  .layerRow.on .dot { background: rgb(var(--c)); box-shadow: 0 0 6px rgba(var(--c),0.7); }
+  .layerRow.on { color: var(--ink); }
+  .layerRow .layerIndex { color: var(--ink-faint); font-size: 10px; }
+  .layerRow .layerLabel { flex: 1; }
+  .layerCount { color: var(--ink-faint); font-size: 10px; }
+
+  /* ---------- bottom-left toggles ---------- */
+  #toolDock { position: fixed; bottom: 130px; left: 28px; z-index: 20; display: flex; flex-direction: column; gap: 8px; }
+  .toolBtn {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-dim);
+    background: rgba(11,12,14,0.55); border: 1px solid var(--rule); padding: 8px 12px; cursor: pointer; text-align: left; width: 176px;
+  }
+  .toolBtn:hover { color: var(--ink); border-color: var(--ink-faint); }
+  .toolBtn.on { color: var(--ink); border-color: rgba(231,227,218,0.4); }
+
+  /* ---------- floating panels (assumptions / worldlines / accession) ---------- */
+  .floatPanel {
+    position: fixed; bottom: 130px; left: 220px; z-index: 24; width: 300px;
+    background: var(--panel-bg); border: 1px solid var(--rule); padding: 18px;
+    display: none; max-height: 60vh; overflow-y: auto;
+  }
+  .floatPanel.open { display: block; }
+  .floatPanel h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; margin: 0 0 14px; font-weight: 500; color: var(--ink); }
+  .floatPanel .closeX { float: right; background: none; border: none; color: var(--ink-faint); cursor: pointer; font-size: 14px; }
+
+  .assumRow { margin-bottom: 16px; }
+  .assumHead { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; margin-bottom: 6px; }
+  .assumVal { color: var(--ink-dim); }
+  .assumSlider { width: 100%; accent-color: #c8c4bc; }
+  .assumEnds { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9px; color: var(--ink-faint); margin-top: 3px; }
+
+  #presets { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .presetBtn { text-align: left; background: none; border: 1px solid var(--rule-soft); color: var(--ink-dim); padding: 8px 10px; cursor: pointer; }
+  .presetBtn:hover { border-color: var(--rule); }
+  .presetBtn.on { border-color: rgba(231,227,218,0.45); color: var(--ink); }
+  .presetName { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; }
+  .presetDesc { display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; font-family: var(--serif); }
+
+  #saveWorldline {
+    width: 100%; margin-top: 4px; background: none; border: 1px solid var(--rule); color: var(--ink-dim);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; padding: 8px; cursor: pointer;
+  }
+  #saveWorldline:hover { border-color: var(--ink-faint); color: var(--ink); }
+  .savedRow { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--rule-soft); font-size: 12px; }
+  .savedRow span { flex: 1; }
+  .loadBtn, .delBtn { font-family: var(--mono); font-size: 9px; background: none; border: 1px solid var(--rule-soft); color: var(--ink-faint); cursor: pointer; padding: 3px 6px; }
+  .emptyNote { color: var(--ink-faint); font-size: 12px; font-style: italic; }
+
+  .accStep { margin-bottom: 10px; }
+  .accLabel { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink-dim); margin-bottom: 4px; }
+  .accStep.reached .accLabel { color: var(--ink); }
+  .accBar { height: 2px; background: var(--rule-soft); }
+  .accBar span { display: block; height: 100%; background: rgb(var(--space)); transition: width 600ms ease; }
+
+  /* ---------- right: signal / region panel ---------- */
+  #panel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 92vw;
+    background: var(--panel-bg); border-left: 1px solid var(--rule);
+    padding: 76px 26px 40px; overflow-y: auto;
+    transform: translateX(100%); transition: transform 380ms cubic-bezier(.2,.7,.2,1);
+    z-index: 30;
+  }
+  #panel.open { transform: translateX(0); }
+  .panelClose { position: absolute; top: 26px; right: 22px; background: none; border: none; color: var(--ink-faint); font-size: 20px; cursor: pointer; line-height: 1; }
+  .panelClose:hover { color: var(--ink); }
+  .panelEyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint); margin-bottom: 10px; }
+  .panelTitle { font-size: 24px; line-height: 1.25; font-weight: 400; margin: 0 0 6px; }
+  .panelKind { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(var(--climate),0.9); margin-bottom: 22px; }
+  .panelStats { display: flex; gap: 18px; margin-bottom: 22px; flex-wrap: wrap; }
+  .panelStats.regionGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .stat { min-width: 64px; }
+  .statVal { font-family: var(--mono); font-size: 20px; }
+  .statLabel { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--ink-faint); margin-top: 3px; text-transform: uppercase; }
+  .epi-OBSERVED { color: rgb(var(--resources)); font-size: 13px; }
+  .epi-PROJECTED { color: rgb(var(--migration)); font-size: 13px; }
+  .epi-MODELED { color: rgb(var(--climate)); font-size: 13px; }
+  .epi-SPECULATIVE { color: rgb(var(--conflict)); font-size: 13px; }
+
+  .panelBody { font-size: 15px; line-height: 1.6; color: var(--ink-dim); margin-bottom: 24px; }
+  .panelSectionLabel { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--ink-faint); margin: 22px 0 12px; }
+
+  .chain { margin-bottom: 20px; }
+  .chainNode {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; padding: 8px 10px;
+    border: 1px solid var(--rule); cursor: pointer; color: var(--ink-dim);
+  }
+  .chainNode:hover { border-color: var(--ink-faint); color: var(--ink); background: rgba(231,227,218,0.04); }
+  .chainArrow { text-align: center; color: var(--ink-faint); font-size: 11px; padding: 3px 0; }
+
+  .whyBtn, .sourcesBtn {
+    width: 100%; text-align: left; background: none; border: 1px solid var(--rule); color: var(--ink-dim);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; padding: 11px 13px; cursor: pointer; margin-bottom: 10px;
+  }
+  .whyBtn:hover, .sourcesBtn:hover { border-color: var(--ink-faint); color: var(--ink); }
+  .whyPanel { padding: 4px 2px 16px; }
+  .whyRow { display: grid; grid-template-columns: 100px 1fr 40px; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .whyLabel { font-family: var(--mono); font-size: 9px; color: var(--ink-faint); letter-spacing: 0.04em; }
+  .whyBar { height: 3px; background: var(--rule-soft); }
+  .whyBar span { display: block; height: 100%; }
+  .whyVal { font-family: var(--mono); font-size: 11px; text-align: right; }
+  .whyTotal { border-top: 1px solid var(--rule); padding-top: 8px; margin-top: 4px; }
+  .whyTotal .whyLabel, .whyTotal .whyVal { color: var(--ink); }
+
+  .sourcesPanel { padding-bottom: 16px; }
+  .sourceRow { display: block; padding: 9px 0; border-bottom: 1px solid var(--rule-soft); text-decoration: none; color: var(--ink-dim); }
+  .sourceRow:hover .sourceTitle { color: var(--ink); }
+  .sourceOrg { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--ink-faint); }
+  .sourceTitle { display: block; font-size: 13px; margin-top: 2px; }
+  .sourceYear { font-family: var(--mono); font-size: 9px; color: var(--ink-faint); }
+
+  .methodNote { font-size: 12px; color: var(--ink-faint); font-style: italic; line-height: 1.55; margin-top: 24px; border-top: 1px solid var(--rule-soft); padding-top: 16px; }
+
+  .sigLink { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule-soft); font-size: 13px; cursor: pointer; color: var(--ink-dim); }
+  .sigLink:hover { color: var(--ink); }
+  .sigLink span { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+
+  .nodeTip {
+    position: fixed; z-index: 40; width: 260px; background: var(--panel-bg); border: 1px solid var(--rule);
+    padding: 14px; font-size: 12px; color: var(--ink-dim); line-height: 1.5;
+  }
+  .nodeTip b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 6px; font-family: var(--mono); letter-spacing: 0.03em; }
+  .nodeTip p { margin: 0 0 8px; }
+  .tipRow { font-family: var(--mono); font-size: 10px; margin-top: 6px; color: var(--ink-faint); }
+  .tipRow span { color: var(--ink-dim); letter-spacing: 0.06em; }
+
+  #hoverCard {
+    position: fixed; z-index: 22; pointer-events: none; font-family: var(--mono); font-size: 11px;
+    background: rgba(11,12,14,0.88); border: 1px solid var(--rule); padding: 6px 10px; color: var(--ink-dim);
+    white-space: nowrap;
+  }
+
+  /* ---------- timeline ---------- */
+  #timelineDock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 0 28px 26px; }
+  #timelineTop { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+  #yearGroup { display: flex; align-items: baseline; gap: 12px; }
+  #yearLabel { font-family: var(--mono); font-size: 34px; font-weight: 500; letter-spacing: -0.01em; }
+  #yearInput {
+    background: none; border: none; border-bottom: 1px solid var(--rule); color: var(--ink-faint);
+    font-family: var(--mono); font-size: 12px; width: 70px; padding: 2px 0;
+  }
+  #yearInput:focus { outline: none; border-color: var(--ink-faint); color: var(--ink); }
+  #horizonLabel { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-dim); cursor: help; }
+  #stepLabel { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); text-align: right; }
+
+  #track { position: relative; height: 34px; cursor: pointer; }
+  #trackLine { position: absolute; left: 0; right: 0; top: 16px; height: 1px; background: var(--rule); }
+  #trackFill { position: absolute; left: 0; top: 15.5px; height: 2px; background: rgba(231,227,218,0.4); }
+  .tick {
+    position: absolute; top: 8px; transform: translateX(-50%); font-family: var(--mono); font-size: 9px;
+    color: var(--ink-faint); cursor: pointer; padding: 6px 4px; user-select: none;
+  }
+  .tick:hover { color: var(--ink); }
+  .tick::after { content: ''; position: absolute; left: 50%; top: 18px; width: 1px; height: 5px; background: var(--rule); transform: translateX(-50%); }
+  #handle {
+    position: absolute; top: 10px; width: 12px; height: 12px; margin-left: -6px;
+    border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 4px rgba(231,227,218,0.12);
+  }
+
+  #deepBanner {
+    position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 21;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-align: center;
+    color: var(--ink-faint); max-width: 460px; line-height: 1.7;
+  }
+  #deepBanner b { color: var(--ink-dim); letter-spacing: 0.14em; }
+
+  /* ---------- method modal ---------- */
+  #methodModal {
+    position: fixed; inset: 0; z-index: 60; background: rgba(6,7,8,0.86);
+    display: none; align-items: center; justify-content: center; padding: 40px;
+  }
+  #methodModal.open { display: flex; }
+  #methodModal .box {
+    max-width: 620px; max-height: 82vh; overflow-y: auto; background: var(--bg); border: 1px solid var(--rule); padding: 40px;
+  }
+  #methodModal h2 { font-size: 22px; font-weight: 400; margin: 0 0 4px; }
+  #methodModal .lede { color: var(--ink-faint); font-size: 12px; font-family: var(--mono); letter-spacing: 0.06em; margin-bottom: 26px; }
+  #methodModal h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink); margin: 24px 0 8px; }
+  #methodModal p { font-size: 14px; line-height: 1.65; color: var(--ink-dim); margin: 0 0 10px; }
+  #methodModal .epiRow { display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; }
+  #methodModal .epiTag { font-family: var(--mono); font-size: 10px; width: 96px; flex-shrink: 0; }
+  #methodModal button { margin-top: 26px; background: none; border: 1px solid var(--rule); color: var(--ink-dim); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; padding: 10px 18px; cursor: pointer; }
+  #methodModal button:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+  /* ---------- intro ---------- */
+  #intro {
+    position: fixed; inset: 0; z-index: 100; background: #060708;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    transition: opacity 900ms ease; padding: 24px;
+  }
+  #intro.gone { opacity: 0; pointer-events: none; }
+  #intro .line1 { font-size: clamp(22px, 4vw, 34px); font-weight: 400; opacity: 0; animation: fadeUp 1400ms 300ms forwards; }
+  #intro .line2 { font-size: clamp(22px, 4vw, 34px); font-weight: 400; color: var(--ink-dim); opacity: 0; animation: fadeUp 1400ms 1500ms forwards; margin-top: 8px; }
+  #introEnter {
+    margin-top: 60px; opacity: 0; animation: fadeUp 1400ms 3000ms forwards;
+    background: none; border: 1px solid var(--rule); color: var(--ink-dim); font-family: var(--mono);
+    font-size: 11px; letter-spacing: 0.16em; padding: 14px 26px; cursor: pointer;
+  }
+  #introEnter:hover { color: var(--ink); border-color: var(--ink-faint); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 860px) {
+    #layerDock { top: auto; bottom: 130px; left: 12px; width: 150px; }
+    #toolDock { display: none; }
+    .floatPanel { left: 12px; right: 12px; width: auto; bottom: 130px; }
+    #panel { width: 100vw; }
+    .searchWrap { width: 60vw; top: 78px; }
+    #brand { top: 20px; left: 16px; }
+    #methodBtn { top: 20px; right: 16px; }
+    #timelineDock { padding: 0 14px 18px; }
+    #deepBanner { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="globe"></canvas>
+</div>
+
+<div id="hoverCard" hidden></div>
+
+<div id="brand">
+  <div class="title">WORLDLINE</div>
+  <div class="sub">A MAP OF POSSIBLE FUTURES</div>
+</div>
+
+<button id="methodBtn">METHOD</button>
+
+<div class="searchWrap">
+  <input id="searchInput" type="text" placeholder="Search — Arctic, freshwater, migration, lunar infrastructure…" autocomplete="off">
+  <div id="searchResults" hidden></div>
+</div>
+
+<div id="layerDock">
+  <div class="dockLabel">WORLD</div>
+  <div id="layers"></div>
+</div>
+
+<div id="toolDock">
+  <button class="toolBtn" data-toggle="assumptionsPanel">SCENARIO</button>
+  <button class="toolBtn" data-toggle="worldlinesPanel">WORLDLINES</button>
+  <button class="toolBtn" data-toggle="accessionPanel">THE ACCESSION</button>
+</div>
+
+<div class="floatPanel" id="assumptionsPanel">
+  <button class="closeX" data-toggle="assumptionsPanel">×</button>
+  <h3>SCENARIO ASSUMPTIONS</h3>
+  <div id="presets"></div>
+  <div id="assumptions"></div>
+</div>
+
+<div class="floatPanel" id="worldlinesPanel">
+  <button class="closeX" data-toggle="worldlinesPanel">×</button>
+  <h3>SAVED WORLDLINES</h3>
+  <button id="saveWorldline">SAVE CURRENT WORLDLINE</button>
+  <div id="savedWorldlines" style="margin-top:14px;"></div>
+</div>
+
+<div class="floatPanel" id="accessionPanel">
+  <button class="closeX" data-toggle="accessionPanel">×</button>
+  <h3>THE ACCESSION</h3>
+  <div id="accession"></div>
+</div>
+
+<div id="panel"></div>
+
+<div id="deepBanner" hidden>
+  <b>DEEP FUTURE</b><br>
+  This visualization represents speculative scenarios based on defined assumptions. It is not a forecast.
+</div>
+
+<div id="timelineDock">
+  <div id="timelineTop">
+    <div id="yearGroup">
+      <span id="yearLabel" class="mono">2038</span>
+      <input id="yearInput" type="number" value="2038">
+      <span id="horizonLabel"></span>
+    </div>
+    <div id="stepLabel"></div>
+  </div>
+  <div id="track">
+    <div id="trackLine"></div>
+    <div id="trackFill"></div>
+    <div class="tick" data-year="2026" style="left:0%">2026</div>
+    <div class="tick" data-year="2050" style="left:32%">2050</div>
+    <div class="tick" data-year="2100" style="left:58%">2100</div>
+    <div class="tick" data-year="2200" style="left:73%">2200</div>
+    <div class="tick" data-year="2500" style="left:85%">2500</div>
+    <div class="tick" data-year="10000" style="left:100%">10,000</div>
+    <div id="handle"></div>
+  </div>
+</div>
+
+<div id="methodModal">
+  <div class="box">
+    <h2>Method</h2>
+    <div class="lede">WHAT THIS INTERFACE IS AND ISN'T</div>
+    <p>WORLDLINE is a working model of how climate, conflict, migration, resources, power, and space infrastructure interact over time — not a forecast. Every number on the map is computed live from assumptions you can see and change in the SCENARIO panel.</p>
+    <h4>THE FOUR CATEGORIES</h4>
+    <div class="epiRow"><span class="epiTag epi-OBSERVED">OBSERVED</span><span>Current or historical measurement.</span></div>
+    <div class="epiRow"><span class="epiTag epi-PROJECTED">PROJECTED</span><span>A present trend extended forward.</span></div>
+    <div class="epiRow"><span class="epiTag epi-MODELED">MODELED</span><span>An output of this model, under stated assumptions.</span></div>
+    <div class="epiRow"><span class="epiTag epi-SPECULATIVE">SPECULATIVE</span><span>A structurally possible future. Read the number as a shape, not a quantity.</span></div>
+    <h4>HOW THE NUMBERS ARE MADE</h4>
+    <p>Each region carries declared baseline parameters (governance, military posture, water stress, and so on), informed by real assessments — IPCC, UN Population Prospects, SIPRI, UNHCR, Aqueduct, and others listed under VIEW SOURCES on every signal. Those baselines are then moved by a small deterministic model as time and your assumptions change. The WHY? panel on any signal shows the actual arithmetic — the terms shown are the terms summed, nothing is hidden.</p>
+    <p>The sources are the evidence base the parameters were drawn from. They are not the origin of any specific probability shown here — that distinction matters, and the interface tries never to blur it.</p>
+    <h4>UNCERTAINTY, DRAWN</h4>
+    <p>Confidence falls the further a signal reaches into the future. A confident signal renders as a tight point; an uncertain one renders as a diffuse scatter with no clear center. You can see how much is known before you read a single number.</p>
+    <h4>WHAT IT WILL NEVER DO</h4>
+    <p>Name a war. State a date for one. Present a modeled output as measured fact. Every conflict signal is framed as elevated probability under current conditions — never as an event.</p>
+    <button id="methodClose">CLOSE</button>
+  </div>
+</div>
+
+<div id="intro">
+  <div class="line1">THE FUTURE IS NOT A PLACE.</div>
+  <div class="line2">IT IS A SYSTEM.</div>
+  <button id="introEnter">EXPLORE 2026 → 2100+</button>
+</div>
+
+<script type="module" src="js/app.js"></script>
+<script>
+  document.getElementById('methodBtn').addEventListener('click', () => document.getElementById('methodModal').classList.add('open'));
+  document.getElementById('methodClose').addEventListener('click', () => document.getElementById('methodModal').classList.remove('open'));
+  document.getElementById('methodModal').addEventListener('click', e => { if (e.target.id === 'methodModal') e.currentTarget.classList.remove('open'); });
+</script>
+</body>
+</html>
