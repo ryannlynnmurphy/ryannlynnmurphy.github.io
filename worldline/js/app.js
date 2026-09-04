@@ -184,11 +184,12 @@ function frame(now) {
     const stabilityFn = showStability
       ? (lat, lng) => borderStability(state.scenario, state.year, lat, lng)
       : () => 0;
-    drawBorders(ctx, cam, geo, stabilityFn, THEME, t);
-    if (state.layers.has('conflict')) {
-      const shiftFn = (lat, lng) => territorialShift(state.scenario, state.year, lat, lng);
-      drawTerritorialShifts(ctx, cam, geo, shiftFn, THEME, t);
-    }
+    const showShift = state.layers.has('conflict');
+    const shiftFn = showShift
+      ? (lat, lng) => territorialShift(state.scenario, state.year, lat, lng)
+      : null;
+    drawBorders(ctx, cam, geo, stabilityFn, THEME, t, shiftFn);
+    if (showShift) drawTerritorialShifts(ctx, cam, geo, shiftFn, THEME, t);
   }
 
   state.signals = activeSignals(state.scenario, state.year);

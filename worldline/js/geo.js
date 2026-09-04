@@ -296,28 +296,39 @@ export function drawGlobe(ctx, cam, geo, theme, erodedLand, floodBandRings) {
   ctx.strokeStyle = theme.limb; ctx.lineWidth = 0.8; ctx.stroke();
 }
 
+const TERRITORY_FADE_FULL = 0.4;   // magnitude at which the old line has fully vanished
+
 /**
  * Border-stability overlay: real political-border arcs only (see the note
  * at the top of this file), styled by how contested the ground either side
  * of them is right now. `stabilityFn(midLat, midLng)` returns 0 (stable) to
  * 1 (actively contested) and is supplied by the caller — this file only
  * draws, it never decides what a border is worth.
+ *
+ * `shiftFn`, if given, is the same territorial-shift lookup passed to
+ * drawTerritorialShifts. A border that is actively being redrawn fades out
+ * here as the speculative line fades in there, so the two never sit on top
+ * of each other indefinitely — old border gone, new one in its place, not
+ * a permanent double line.
  */
-export function drawBorders(ctx, cam, geo, stabilityFn, theme, t) {
+export function drawBorders(ctx, cam, geo, stabilityFn, theme, t, shiftFn) {
   for (const seg of geo.borders) {
     const midI = Math.floor(seg.length / 2);
     const [midLng, midLat] = seg[midI];
     const s = stabilityFn(midLat, midLng);
+    const shift = shiftFn ? shiftFn(midLat, midLng) : null;
+    const fade = shift ? 1 - Math.min(1, shift.magnitude / TERRITORY_FADE_FULL) : 1;
+    if (fade <= 0.02) continue;
 
     ctx.beginPath();
     strokeVisible(ctx, cam, seg, true);
     if (s < 0.16) {
-      ctx.strokeStyle = theme.borderStable;
+      ctx.strokeStyle = theme.borderStable.replace(/[\d.]+\)$/, v => (parseFloat(v) * fade) + ')');
       ctx.lineWidth = 0.55;
       ctx.stroke();
     } else {
       const pulse = 0.7 + 0.3 * Math.sin(t * 1.6 + midLat * 0.3);
-      ctx.strokeStyle = `rgba(196,88,74,${(0.18 + 0.55 * s) * pulse})`;
+      ctx.strokeStyle = `rgba(196,88,74,${(0.18 + 0.55 * s) * pulse * fade})`;
       ctx.lineWidth = 0.6 + 1.6 * s;
       ctx.stroke();
     }
